@@ -1,43 +1,25 @@
 % A3 assignment, weight and weight fraction
 
-% level flight
-WB_W_LF = (V_CR*t_LF)/(LD_LF*etaP_LF*etaM*etaESC*rho_B);
+% level flight/cruise
+WB_W_LF = (V_CR*t_CR)/(LD_CR*etaP_CR*etaM*etaESC*rho_B);
 
-% fprintf("Level flight battery weight fraction: \n");
-% disp(WB_W_LF);
-
-% constants - turning flight
-WB_W_TF = (V_M*t_TF*n)/(LD_TF*etaP_M*etaM*etaESC*rho_B);
-
-% fprintf("Turning Flight battery weight fraction: \n");
-% disp(WB_W_TF);
+% turning flight/maneuver
+WB_W_TF = (V_M*t_M*n)/(LD_M*etaP_M*etaM*etaESC*rho_B);
 
 % climb
 WB_W_CL = ((V_CL*t_CL)/(etaP_CL*etaM*etaESC*rho_B))*(((cosd(gamma))/(LD_CL)) + sind(gamma));
 
-% fprintf("Climb battery weight fraction: \n");
-% disp(WB_W_CL);
-
-% constants - takeoff
+% takeoff
 WB_W_TO = t_TO/(etaM*etaESC*rho_B*W_P);
-
-% fprintf("Takeoff battery weight fraction: \n");
-% disp(WB_W_TO);
 
 % warmup 
 WB_W_WU = N*(WB_W_TO); % takeoff battery weight fraction
-
-% fprintf("Warmup battery weight fraction: \n");
-% disp(WB_W_WU);
 
 % total weight fraction calculation
 WB_W_total = WB_W_TO + WB_W_WU + WB_W_CL + WB_W_LF + WB_W_TF;
 
 % accounting for efficiencies 
-WB_W_eff= WB_W_total/(etaP_LF*etaM*etaESC*etaUse*etaTemp);
-
-% fprintf("Total battery weight fraction accounting for efficiency: \n");
-% disp(WB_W_eff);
+WB_W_eff= WB_W_total/(etaP_CR*etaM*etaESC*etaUse*etaTemp);
 
 % finding the empty weight
 W = linspace(0, 100, 1000);
@@ -63,8 +45,6 @@ grid on;
 % empty weight fraction
 w_e = W_int - 0.1582*W_int - 2.9575;
 we_W = w_e/W_int;
-% fprintf("Empty weight fraction: \n");
-% disp(we_W);
 
 w_b = WB_W_eff*W_int;
 
@@ -82,9 +62,6 @@ E_TO = (WB_W_TO*W_int) * rho_B;
 E_WU = (WB_W_WU*W_int) * rho_B;
 E_total = (E_LF + E_TF + E_CL + E_TO + E_WU)/(etaTemp*etaUse);
 
-% fprintf("Total Energy = \n");
-% disp(E_total);
-
-fprintf("Total Weight is: %f [N] \n%27.4d [kg]\n\n",W_int,W_int/g)
+fprintf("Total Weight is: %f [N] or %.4f [kg]\n\n",W_int,W_int/g)
 
 

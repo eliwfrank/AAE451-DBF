@@ -1,5 +1,5 @@
-clc
 clear
+clc
 close all
 
 run("param.m")

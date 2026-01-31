@@ -49,3 +49,17 @@ rho_B = 527000/g; % batter energy density (J/N)
 n = 1.3; % turning flight load factor
 N = 10; % multiple of takeoff time, warmup
 w_p = 5.1012; % weight of payload in newtons
+
+%% Tail Sizing
+SM = 0.2; % Static Margin
+x_ac = 0.25; % Aerodynamic Center of the Wing
+etaH = 1; % tail efficiency, "if it is not aligned with the wing the number is close to 1.0"
+CLa_w = 5.7; % CLA of wing
+AR_tail = 4;
+de_da = CLa_w / (pi*AR);
+selected_Sh_S = 0.12;
+Cm0_w = -0.05; % from clark y
+CLt_nose_up = -0.8; % [-0.5 to -0.8] max negative tail lift for nose up control
+Cm_req_rot = 0.2; % [0.1 to 0.2] dependant on your configuration and the position of the main landing gear
+CLa_t = 6.86 ; % tail CLa per radian
+aoa_tail_stall = deg2rad(12.25); % Stall angle of attack

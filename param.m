@@ -41,7 +41,7 @@ t_TO = 3; % take off time (s)
 %% random other
 gamma = 12; % climb angle [deg]
 phi = 0.75; % Cruise Throttle
-AR = 4; % the same for individual wing as both wings combined since using the same size wing
+AR = 8.5; % the same for individual wing as both wings combined since using the same size wing
 e = 0.85; % Oswald Efficiency Factor
 q = 0.5 * rho * V_M^2;
 S_TO = 18; % TO run [m]
@@ -57,7 +57,7 @@ etaH = 1; % tail efficiency, "if it is not aligned with the wing the number is c
 CLa_w = 5.7; % CLA of wing
 AR_tail = 4;
 de_da = CLa_w / (pi*AR);
-selected_Sh_S = 0.12;
+selected_Sh_S = 0.07;
 Cm0_w = -0.05; % from clark y
 CLt_nose_up = -0.8; % [-0.5 to -0.8] max negative tail lift for nose up control
 Cm_req_rot = 0.2; % [0.1 to 0.2] dependant on your configuration and the position of the main landing gear

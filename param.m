@@ -14,7 +14,7 @@ V_TO = 12; % TO velocity [m/s]
 CL_max = 1.5; % Max Lift Coefficient
 CD_0 = 0.03; % Parasitic Drag Coefficient
 CD_G = .0875; % Ground Drag Coefficient
-CL_R = 0.8876; % CL at rotation
+CL_R = 1.0417; % CL at rotation
 
 %% Efficiencies
 etaP_CR = 0.7; % Cruise/level flight Propellor Efficiency
@@ -44,7 +44,7 @@ phi = 0.75; % Cruise Throttle
 AR = 8.5; % the same for individual wing as both wings combined since using the same size wing
 e = 0.85; % Oswald Efficiency Factor
 q = 0.5 * rho * V_M^2;
-S_TO = 18; % TO run [m]
+S_TO = 22.5; % TO run [m]
 rho_B = 527000/g; % batter energy density (J/N)
 n = 1.3; % turning flight load factor
 N = 10; % multiple of takeoff time, warmup
@@ -63,3 +63,8 @@ CLt_nose_up = -0.8; % [-0.5 to -0.8] max negative tail lift for nose up control
 Cm_req_rot = 0.2; % [0.1 to 0.2] dependant on your configuration and the position of the main landing gear
 CLa_t = 6.86 ; % tail CLa per radian
 aoa_tail_stall = deg2rad(12.25); % Stall angle of attack
+lt = 1;
+
+%% For CDO calculations
+x_c_max = 0.3;
+t_c = 0.117;

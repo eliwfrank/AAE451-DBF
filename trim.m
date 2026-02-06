@@ -35,4 +35,3 @@ ylabel("\delta_{trim} [deg]")
 title("Trim Elevator Deflection vs. Trim Lift Coefficient")
 grid on
 
-CD = 

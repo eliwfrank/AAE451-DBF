@@ -1,8 +1,6 @@
 %% FUSELAGE
 x_c_max = 0.3;
 t_c = 0.117;
-mu_air = 1.73e-5;
-
 l_f = 2 * c; %generic fuselage length based on wing chord
 lambda_f = 5.1; %fineness/slenderness ratio, 5.1 is optimal per Sadraey
 D_f = l_f / lambda_f; % fuselage diameter
@@ -35,7 +33,6 @@ S_wet_vt = S_vt * 2 * 1.02; %wetted area of vertical tail
 Re_t = rho * V_CR * c_tail_h/mu_air; %Reynolds number with chord as ref length
 C_f_t = 0.455 / (log10(Re_t))^2.58;
 
-
 Q_t = 1.05;
 
 %% NACELLES
@@ -52,12 +49,35 @@ C_D_0_ht = (FF_ht * Q_t * C_f_t * S_wet_ht) / (wing_area_total);
 C_D_0_vt = (FF_vt * Q_t * C_f_t * S_wet_vt) / (wing_area_total);
 
 %TOTAL PARASITIC DRAG
-C_D_0 = C_D_0_f + C_D_0_w + C_D_0_ht + C_D_0_vt; 
+CD_0 = C_D_0_f + C_D_0_w + C_D_0_ht + C_D_0_vt; 
 
 fprintf("\nFuselage CD0: %.4f", C_D_0_f)
 fprintf("\nWing CD0: %.4f", C_D_0_w)
 fprintf("\nTail V CD0: %.4f", C_D_0_vt)
 fprintf("\nTail H CD0: %.4f", C_D_0_ht)
 
-fprintf("\nTotal CD0: %.4f\n", C_D_0)
+fprintf("\nTotal CD0: %.4f\n", CD_0)
+
+CL_w = CL0_w + CLa_w *  deg2rad(a_trim);
+CL_t_trim = CL0_t + CLa_t *  deg2rad(a_trim) + CL_de * deg2rad(de_trim);
+CL_t_clean = CL0_t + CLa_t *  deg2rad(a_trim);
+
+CD_clean = CD_0 + 1/(pi() * e * AR_wing) * CL_w.^2 + Sh_S * CL_t_clean.^2 / (pi() * de_da .* deg2rad(a_trim) * AR_tail);
+CD_trim = CD_0 + 1/(pi() * e * AR_wing) * CL_w.^2 + Sh_S * CL_t_trim.^2 / (pi() * de_da *  deg2rad(a_trim) * AR_tail);
+
+CL_trim = CL_w + CL_t_trim * Sh_S;
+CL_clean = CL_w + CL_t_clean * Sh_S;
+
+figure()
+plot(CL_trim,CD_trim);
+hold on
+plot(CL_clean,CD_clean);
+grid on
+ylabel("CD")
+xlabel("CL")
+title("Drag Polar")
+legend("Trimmed", "Clean")
+
+
+
 

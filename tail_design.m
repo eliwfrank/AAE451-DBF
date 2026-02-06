@@ -1,6 +1,6 @@
 x_cg = linspace(0,1,10000);
 x_np = SM + x_cg;
-lt_c = 1.2/c;
+lt_c = lt/c;
 
 %% forward limit (stability)
 forward_lim_STS = (x_cg - x_ac + SM) ./ (etaH * (1 - de_da) * lt_c - (x_cg - x_ac + SM));
@@ -24,13 +24,13 @@ c_tail_h = tail_area_h / b_tail_h;
 
 %% Vertical Tail Area
 VC_vt = 0.04; % chosen from values in lecture
-l_vt = 1.2; % same as horizontal tail arm
-S_vt = (VC_vt*b*wing_area_total)/(l_vt);
-AR_vt = 1.5; % chosen from values 
+lt = 1; % same as horizontal tail arm
+lambda_vt = 0.4;
+S_vt = (VC_vt*b*wing_area_total)/(lt);
+AR_vt = 2; % chosen from values 
 b_tail_v = sqrt(S_vt*AR_vt);
-c_tail_v = b_tail_v/AR_vt;
-
-
+c_tail_v_root = ((2*b_tail_v)/(AR_vt/(1+lambda_vt)));
+c_tail_v_tip = lambda_vt * c_tail_v_root;
 
 %% Display Results
 figure()
@@ -47,7 +47,7 @@ plot([x_cg_forward x_cg_aft], [selected_Sh_S selected_Sh_S], 'r-', 'LineWidth',2
 % plot(0.22,0.089,"r.",markersize=20)
 legend("Forward limit (stability)","Aft Limit (Stall recovery control)","Forward Limit (Nose-up Control)","Aft Limit (Stability, SM = 0)","selected S_h/S","Forward Limit","Aft Limit","Feasible cg range","Intersection Point")
 title("Scissor Plot")
-ylim([0 0.5])
+% ylim([0 0.5])
 ylabel("S_h/S (Horizontal Tail Area Ratio)")
 xlabel("x_{cg}/c (Center of Gravity Position)")
 
@@ -57,4 +57,6 @@ fprintf("Horizontal Tail Area: %f [m^2]\n",tail_area_h)
 fprintf("Tail Chord length: %.4f [m]\nTail Span: %.4f [m]\nTail Half Span: %0.4f [m]\n\n",c_tail_h,b_tail_h,b_tail_h/2)
 fprintf("Vertical Stabilizer Area:  %.4f [m^2]\n", S_vt);
 fprintf("Vertical Stabilizer Span:  %.4f [m^2]\n", b_tail_v);
-fprintf("Vertical Stabilizer Chord:  %.4f [m^2]\n", c_tail_v);
+fprintf("Vertical Stabilizer Root Chord:  %.4f [m^2]\n", c_tail_v_root);
+fprintf("Vertical Stabilizer Tip Chord:  %.4f [m^2]\n", c_tail_v_tip);
+

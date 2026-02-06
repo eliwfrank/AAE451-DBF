@@ -1,6 +1,6 @@
 x_cg = linspace(0,1,10000);
 x_np = SM + x_cg;
-lt_c = 1.2/c;
+lt_c = 1/c;
 
 %% forward limit (stability)
 forward_lim_STS = (x_cg - x_ac + SM) ./ (etaH * (1 - de_da) * lt_c - (x_cg - x_ac + SM));
@@ -21,16 +21,32 @@ x_cg_aft = interp1(forward_lim_STS, x_cg,selected_Sh_S);
 tail_area_h = selected_Sh_S * wing_area_total;
 b_tail_h = sqrt(tail_area_h * AR_tail);
 c_tail_h = tail_area_h / b_tail_h;
+V_ht = (1*tail_area_h)/(c*wing_area_total);
 
 %% Vertical Tail Area
-VC_vt = 0.04; % chosen from values in lecture
-l_vt = 1.2; % same as horizontal tail arm
+% VC_vt = 0.03;                 % chosen from values in lecture
+% l_vt = 1.2;                   % same as horizontal tail arm
+% lambda_vt = 0.4;              % taper ratio (ctip / croot)
+% 
+% S_vt = (VC_vt*b*wing_area_total)/l_vt;
+% 
+% c_tail_v_root = c_tail_h;
+% c_tail_v_tip  = lambda_vt * c_tail_v_root;
+% 
+% b_tail_v = (2*S_vt) / (c_tail_v_root*(1 + lambda_vt));
+% 
+% AR_vt = (b_tail_v)^2 / S_vt;
+
+VC_vt = 0.04;              
+l_vt = 1;                   
+lambda_vt = 0.4; 
 S_vt = (VC_vt*b*wing_area_total)/(l_vt);
-AR_vt = 1.5; % chosen from values 
+AR_vt = 2; % chosen from values 
 b_tail_v = sqrt(S_vt*AR_vt);
-c_tail_v = b_tail_v/AR_vt;
+c_tail_v_root = ((2*b_tail_v)/(AR_vt))/(1+lambda_vt);
+c_tail_v_tip = lambda_vt * c_tail_v_root;
 
-
+% c_tail_v_tip  = lambda_vt * c_tail_v_root;
 
 %% Display Results
 figure()
@@ -57,4 +73,5 @@ fprintf("Horizontal Tail Area: %f [m^2]\n",tail_area_h)
 fprintf("Tail Chord length: %.4f [m]\nTail Span: %.4f [m]\nTail Half Span: %0.4f [m]\n\n",c_tail_h,b_tail_h,b_tail_h/2)
 fprintf("Vertical Stabilizer Area:  %.4f [m^2]\n", S_vt);
 fprintf("Vertical Stabilizer Span:  %.4f [m^2]\n", b_tail_v);
-fprintf("Vertical Stabilizer Chord:  %.4f [m^2]\n", c_tail_v);
+fprintf("Vertical Stabilizer Root Chord:  %.4f [m^2]\n", c_tail_v_root);
+fprintf("Vertical Stabilizer Tip Chord:  %.4f [m^2]\n\n", c_tail_v_tip);

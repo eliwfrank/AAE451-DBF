@@ -16,9 +16,9 @@ takeoff_rot_STS = (Cm0_w + CL_R * (x_cg - x_ac) - Cm_req_rot) ./ (CLt_nose_up * 
 %% Aft Limit (stability, SM = 0)
 aft_lim_STS = (x_cg - x_ac - 0) ./ (etaH .* (1 - de_da) .* lt_c - (x_cg - x_ac + 0));
 
-x_cg_forward = interp1(takeoff_rot_STS,x_cg, selected_Sh_S);
-x_cg_aft = interp1(forward_lim_STS, x_cg,selected_Sh_S);
-tail_area_h = selected_Sh_S * wing_area_total;
+x_cg_forward = interp1(takeoff_rot_STS,x_cg, Sh_S);
+x_cg_aft = interp1(forward_lim_STS, x_cg,Sh_S);
+tail_area_h = Sh_S * wing_area_total;
 b_tail_h = sqrt(tail_area_h * AR_tail);
 c_tail_h = tail_area_h / b_tail_h;
 V_ht = (1*tail_area_h)/(c*wing_area_total);
@@ -44,7 +44,7 @@ lambda_vt = 0.4;
 S_vt = (VC_vt*b*wing_area_total)/(lt);
 AR_vt = 2; % chosen from values 
 b_tail_v = sqrt(S_vt*AR_vt);
-c_tail_v_root = ((2*b_tail_v)/(AR_vt/(1+lambda_vt)));
+c_tail_v_root = ((2*b_tail_v) / (AR_vt*(1 + lambda_vt)));
 c_tail_v_tip = lambda_vt * c_tail_v_root;
 
 %% Display Results
@@ -55,19 +55,18 @@ grid on
 plot(x_cg,stall_recovery_STS,"k--",LineWidth=2)
 plot(x_cg,takeoff_rot_STS,"k:",LineWidth=2)
 plot(x_cg, aft_lim_STS,"g")
-yline(selected_Sh_S)
-plot(x_cg_forward,selected_Sh_S,"r.",markersize=20)
-plot(x_cg_aft,selected_Sh_S,"r.",markersize=20)
-plot([x_cg_forward x_cg_aft], [selected_Sh_S selected_Sh_S], 'r-', 'LineWidth',2)
-% plot(0.22,0.089,"r.",markersize=20)
-legend("Forward limit (stability)","Aft Limit (Stall recovery control)","Forward Limit (Nose-up Control)","Aft Limit (Stability, SM = 0)","selected S_h/S","Forward Limit","Aft Limit","Feasible cg range","Intersection Point")
+yline(Sh_S)
+plot(x_cg_forward,Sh_S,"r.",markersize=20)
+plot(x_cg_aft,Sh_S,"r.",markersize=20)
+plot([x_cg_forward x_cg_aft], [Sh_S Sh_S], 'r-', 'LineWidth',2)
+plot(0.2694,0.0409)
+legend("Forward limit (stability)","Aft Limit (Stall recovery control)","Forward Limit (Nose-up Control)","Aft Limit (Stability, SM = 0)","selected S_h/S","Forward Limit","Aft Limit","Feasible cg range", "Intersection Point")
 title("Scissor Plot")
-% ylim([0 0.5])
 ylabel("S_h/S (Horizontal Tail Area Ratio)")
 xlabel("x_{cg}/c (Center of Gravity Position)")
 
-fprintf("\nForward Limit: x_cg/c = %.4f, Sh/S = %.2f\n",x_cg_forward, selected_Sh_S)
-fprintf("Aft Limit: x_cg/c = %.4f, Sh/S = %.2f\n",x_cg_aft, selected_Sh_S)
+fprintf("\nForward Limit: x_cg/c = %.4f, Sh/S = %.3f\n",x_cg_forward, Sh_S)
+fprintf("Aft Limit: x_cg/c = %.4f, Sh/S = %.3f\n\n",x_cg_aft, Sh_S)
 fprintf("Horizontal Tail Area: %f [m^2]\n",tail_area_h)
 fprintf("Tail Chord length: %.4f [m]\nTail Span: %.4f [m]\nTail Half Span: %0.4f [m]\n\n",c_tail_h,b_tail_h,b_tail_h/2)
 fprintf("Vertical Stabilizer Area:  %.4f [m^2]\n", S_vt);

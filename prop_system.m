@@ -20,17 +20,17 @@ T_0 = ((W_int*(V_TO^2))/(2*g*S_TO)) + D_TO + mu_ground*(W_int - L_TO);
 fprintf("Estimated Static Thrust: %.4f [N]\n",T_0);
 
 CL_CR = W_int/(0.5*rho*(V_CR^2)*wing_area_total);
-CD_i = (CL_CR^2)/(pi()*AR*e);
+CD_i = (CL_CR^2)/(pi()*AR_wing*e);
 % calculating cruise thrust
-C_D = C_D_0 + CD_i; % add aditional C_Ds after calcualtion, cdi and cdwave
+C_D = CD_0 + CD_i; % add aditional C_Ds after calcualtion, cdi and cdwave
 D_cr = 0.5*C_D*rho*(V_CR^2)*wing_area_total;
 T_cr = D_cr;
 
 % plotting thrust and drag vs airspeed
 velocity_array = linspace(15,60,1000);
 cl_array = (2*W_int)./(rho.*(velocity_array.^2).*wing_area_total);
-cdi_array = (cl_array.^2)/(pi()*AR*e);
-cd_array = C_D_0 + cdi_array;
+cdi_array = (cl_array.^2)/(pi()*AR_wing*e);
+cd_array = CD_0 + cdi_array;
 Thrust_available = P_req_mech./velocity_array;
 D_array = 0.5*cd_array*rho.*((velocity_array).^2).*wing_area_total;
 

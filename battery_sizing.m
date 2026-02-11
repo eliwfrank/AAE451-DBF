@@ -1,5 +1,5 @@
 %% Battery Sizing
-
+fprintf("\nBATTERY SIZING ------------------------\n")
 S = 4; %Battery Series               
 I_avg = 30; %Average Current Draw - this is important to get right, could break up into current draw at different flight stages      
 flight_time_hr = (t_TO + t_M + t_CR + t_CL) / (60*60); %flight time

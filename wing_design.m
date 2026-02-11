@@ -1,3 +1,5 @@
+fprintf("\nWING SIZING ------------------------\n")
+
 wing_area_total = W_int / W_S;
 
 wing_area_ind = wing_area_total / 2; % because of the biplane we need individual

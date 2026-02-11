@@ -49,7 +49,6 @@ S_TO = 22.5; % TO run [m]
 rho_B = 527000/g; % batter energy density (J/N)
 n = 1.3; % turning flight load factor
 N = 10; % multiple of takeoff time, warmup
-Sh_S = 0.085;
 w_p = 5.1012; % weight of payload in newtons
 
 %% Tail Sizing
@@ -59,7 +58,7 @@ etaH = 1; % tail efficiency, "if it is not aligned with the wing the number is c
 CLa_w = 5.7; % CLA of wing
 AR_tail = 4;
 de_da = CLa_w / (pi*AR_wing);
-selected_Sh_S = 0.07;
+Sh_S = 0.085;
 Cm0_w = -0.05; % from clark y
 CLt_nose_up = -0.8; % [-0.5 to -0.8] max negative tail lift for nose up control
 Cm_req_rot = 0.2; % [0.1 to 0.2] dependant on your configuration and the position of the main landing gear
@@ -73,3 +72,8 @@ t_c = 0.117;
 CL0_t = 0; % Tail CL0
 CL0_w = 0.36; % Wing CL0
 E = 0.3; % Elevator Tail Percent, cl/ct where cl is length of tail and ct and c
+t_c_tail = 0.12;
+
+%% fuselage design
+D_f = .1; %generic fuselage length based on wing chord
+

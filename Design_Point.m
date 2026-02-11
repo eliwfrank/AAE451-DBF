@@ -1,3 +1,5 @@
+fprintf("WING AND POWER LOADING ------------------------\n")
+
 num_vals = 100;
 
 %% Stall Constraint
@@ -10,7 +12,6 @@ powerloading_CR = ((etaP_CR * phi) / (0.5 * rho * 1.1 * CD_0 * V_CR^3)) * winglo
 %% Climb Constraint
 powerloading_CL = etaP_CL / (V_CL * ( (1 / (0.866 * LD_max)) + sind(gamma)));
  
-
 %% Maneuver Constraint
 wingloading_M = linspace(1e-8,num_vals,1000);
 powerloading_M = etaP_M ./ (q * V_M * (CD_0 ./ wingloading_M + 1/(pi * AR_wing * e) * (n/q)^2 * wingloading_M));
@@ -36,7 +37,7 @@ W_S = wingloading_stall * margin;
 W_P = interp1(wingloading_TO, powerloading_TO, wingloading_stall) * margin;
 plot(W_S,W_P,'ko', 'MarkerFaceColor', "yellow", 'MarkerSize', 10)
 
-fprintf("Wingloading Design Point (W/S): %.4f [N/m^2]\nPowerloading Design Point (W/P): %.4f [N/W]\n\n", W_S,W_P)
+fprintf("Wingloading Design Point (W/S): %.4f [N/m^2]\nPowerloading Design Point (W/P): %.4f [N/W]\n", W_S,W_P)
 
 legend("Stall","Cruise","Climb","Maneuver","Takeoff","Design Point",Location="northwest")
 title("Aircraft Constraint Diagram")

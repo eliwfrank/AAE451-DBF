@@ -1,4 +1,5 @@
 % A3 assignment, weight and weight fraction
+fprintf("\nWEIGHT ------------------------\n")
 
 % level flight/cruise
 WB_W_LF = (V_CR*t_CR)/(LD_CR*etaP_CR*etaM*etaESC*rho_B);
@@ -29,7 +30,7 @@ W_minus_we = 0.1582.*W + 2.9575;
 W_int = (2.9575 - 5.1012) / (WB_W_eff - 0.1582);
 Y_int = WB_W_eff*W_int + 5.1012;
 
-figure(1);
+figure();
 plot(W, Wb_plus__wp, "m-", LineWidth=2);
 hold on
 plot(W, W_minus_we, "b-", LineWidth=2);
@@ -48,7 +49,7 @@ we_W = w_e/W_int;
 
 w_b = WB_W_eff*W_int;
 
-figure(2);
+figure();
 weights = [w_e w_b w_p];
 names = ["Empty Weight", "Battery Weight", "Payload Weight"];
 piechart(weights, names);
@@ -62,6 +63,6 @@ E_TO = (WB_W_TO*W_int) * rho_B;
 E_WU = (WB_W_WU*W_int) * rho_B;
 E_total = (E_LF + E_TF + E_CL + E_TO + E_WU)/(etaTemp*etaUse);
 
-fprintf("Total Weight is: %f [N] or %.4f [kg]\n\n",W_int,W_int/g)
+fprintf("Total Weight is: %f [N] or %.4f [kg]\n",W_int,W_int/g)
 
 

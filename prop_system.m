@@ -6,6 +6,7 @@ P_req_bat = P_req_mech/(etaM*etaESC);
 % this is how these would change if our weight increased by 50 percent
 P_req_mech_50 = (W_int*1.5)/(W_P);
 P_req_bat_50 = P_req_mech_50/(etaM*etaESC);
+fprintf("\nPOWER REQUIREMENTS ------------------------\n")
 
 fprintf("Battery Power Required: %.4f [W]\n",P_req_bat);
 
@@ -34,7 +35,7 @@ cd_array = CD_0 + cdi_array;
 Thrust_available = P_req_mech./velocity_array;
 D_array = 0.5*cd_array*rho.*((velocity_array).^2).*wing_area_total;
 
-figure(6);
+figure();
 plot(velocity_array, Thrust_available, "m-", linewidth = 1.5);
 hold on
 plot(velocity_array, D_array, "g-", linewidth = 1.5);
@@ -48,7 +49,7 @@ grid on;
 P_mech_min = D_array.*velocity_array;
 P_elec_min = P_mech_min./(etaESC*etaM);
 
-figure(7);
+figure();
 plot(velocity_array, P_elec_min, "b-", LineWidth=1.5);
 xlabel('Airspeed (m/s)');
 ylabel("Power (W)");
@@ -58,7 +59,7 @@ title("Electrical Power vs Airspeed");
 % plotting propeller efficiency vs airspeed
 n_p_array = (T_cr.*velocity_array)./P_elec_min;
 
-figure(8);
+figure();
 
 plot(velocity_array, n_p_array, "c-", linewidth = 1.5);
 ylabel("Propeller Efficiency");

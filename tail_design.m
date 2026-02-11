@@ -1,3 +1,4 @@
+
 x_cg = linspace(0,1,10000);
 x_np = SM + x_cg;
 lt_c = lt/c;
@@ -38,6 +39,7 @@ V_ht = (1*tail_area_h)/(c*wing_area_total);
 % AR_vt = (b_tail_v)^2 / S_vt;
 
 % c_tail_v_tip  = lambda_vt * c_tail_v_root;
+
 VC_vt = 0.04; % chosen from values in lecture
 lt = 1; % same as horizontal tail arm
 lambda_vt = 0.4;
@@ -65,11 +67,14 @@ title("Scissor Plot")
 ylabel("S_h/S (Horizontal Tail Area Ratio)")
 xlabel("x_{cg}/c (Center of Gravity Position)")
 
-fprintf("\nForward Limit: x_cg/c = %.4f, Sh/S = %.3f\n",x_cg_forward, Sh_S)
-fprintf("Aft Limit: x_cg/c = %.4f, Sh/S = %.3f\n\n",x_cg_aft, Sh_S)
-fprintf("Horizontal Tail Area: %f [m^2]\n",tail_area_h)
-fprintf("Tail Chord length: %.4f [m]\nTail Span: %.4f [m]\nTail Half Span: %0.4f [m]\n\n",c_tail_h,b_tail_h,b_tail_h/2)
+fprintf("\nCG LOCATION ------------------------\n")
+
+fprintf("Forward Limit: x_cg/c = %.4f, Sh/S = %.3f\n",x_cg_forward, Sh_S)
+fprintf("Aft Limit: x_cg/c = %.4f, Sh/S = %.3f\n",x_cg_aft, Sh_S)
+fprintf("\nTAIL SIZING ------------------------\n")
+fprintf("Horizontal Stabilizer Area: %f [m^2]\n",tail_area_h)
+fprintf("Horizontal Stabilizer Chord: %.4f [m]\nHorizontal Stabilizer Span: %.4f [m]\nHorizontal Stabilizer Half Span: %0.4f [m]\n\n",c_tail_h,b_tail_h,b_tail_h/2)
 fprintf("Vertical Stabilizer Area:  %.4f [m^2]\n", S_vt);
 fprintf("Vertical Stabilizer Span:  %.4f [m^2]\n", b_tail_v);
 fprintf("Vertical Stabilizer Root Chord:  %.4f [m^2]\n", c_tail_v_root);
-fprintf("Vertical Stabilizer Tip Chord:  %.4f [m^2]\n\n", c_tail_v_tip);
+fprintf("Vertical Stabilizer Tip Chord:  %.4f [m^2]\n", c_tail_v_tip);

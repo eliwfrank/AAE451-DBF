@@ -56,7 +56,7 @@ FF_ht = (1 + 0.6/(x_c_max)*(t_c_tail) + 100*(t_c_tail)^4) * (1.34*M^0.18*(cos(La
 S_wet_ht = tail_area_h * 2 * (1.02); %wetted area of horizontal tail
 
 FF_vt = (1 + 0.6/(x_c_max)*(t_c_tail) + 100*(t_c_tail)^4) * (1.34*M^0.18*(cos(Lambda_m_vtail))^0.28); %vertical tail form factor
-S_wet_vt = S_vt * 2 * (1.02); %wetted area of vertical tail
+S_wet_vt = tail_area_v * 2 * (1.02); %wetted area of vertical tail
 
 Re_t = rho * V_CR * c_tail_h/mu_air; %Reynolds number with chord as ref length
 C_f_t = 0.455 / (log10(Re_t))^2.58;

@@ -15,7 +15,7 @@ V_TO = 12; % TO velocity [m/s]
 CL_max = 1.5; % Max Lift Coefficient
 CD_0 = 0.03; % Parasitic Drag Coefficient
 CD_G = .0875; % Ground Drag Coefficient
-CL_R = 1.0417; % CL at rotation
+CL_R = 0.9375; % CL at rotation - recalculated 
 
 %% Efficiencies
 etaP_CR = 0.7; % Cruise/level flight Propellor Efficiency
@@ -42,12 +42,12 @@ t_TO = 3; % take off time (s)
 %% random other
 gamma = 12; % climb angle [deg]
 phi = 0.75; % Cruise Throttle
-AR_wing = 8.5; % the same for individual wing as both wings combined since using the same size wing
+AR_wing = 7; % the same for individual wing as both wings combined since using the same size wing
 e = 0.85; % Oswald Efficiency Factor
 q = 0.5 * rho * V_M^2;
 S_TO = 22.5; % TO run [m]
 rho_B = 527000/g; % batter energy density (J/N)
-n = 1.3; % turning flight load factor
+n = 1.2; % turning flight load factor
 N = 10; % multiple of takeoff time, warmup
 w_p = 5.1012; % weight of payload in newtons
 
@@ -73,7 +73,4 @@ CL0_t = 0; % Tail CL0
 CL0_w = 0.36; % Wing CL0
 E = 0.3; % Elevator Tail Percent, cl/ct where cl is length of tail and ct and c
 t_c_tail = 0.12;
-
-%% fuselage design
-D_f = .1; %generic fuselage length based on wing chord
 

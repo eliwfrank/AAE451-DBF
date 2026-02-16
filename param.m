@@ -12,27 +12,21 @@ V_CL = 13; % Climb Velocity
 V_TO = 12; % TO velocity [m/s]
 
 %% Coefficients
-% CL_max = 1.5; % Max Lift Coefficient, Initial Assumed Value
-CD_0 = 0.03; % Parasitic Drag Coefficient
+CD_0 = 0.0343; % Parasitic Drag Coefficient
 CD_G = .0875; % Ground Drag Coefficient
 CL_R = 0.9375; % CL at rotation - recalculated, 
 
 %% Efficiencies
-etaP_CR = 0.7; % Cruise/level flight Propellor Efficiency
+etaP_CR = 0.65; % Cruise/level flight Propellor Efficiency
 etaP_TO = 0.5; % TO prop efficiency
 etaP_CL = 0.5; % Climb Propellor efficiency
 etaP_M = 0.65; % maneuvering propeller efficiency
+
 etaM = 0.8; % motor efficiency
 etaESC = 0.95; % ESC efficiency
 etaUse = 0.8; % use efficiency
 etaTemp = 0.8; % temperature efficiency
 etaH = 1; % tail efficiency, "if it is not aligned with the wing the number is close to 1.0"
-
-%% L/D
-LD_max = 12;
-LD_CR = 12.3; % lift to drag ratio in level flight
-LD_M = 11; % lift to drag ratio in turning flight
-LD_CL = 10; % lift to drag ratio in climb
 
 %% phase times
 t_CR = 135; % level flight time (s)
@@ -82,15 +76,20 @@ cla_t = 6.86 ; % tail CLa per radian
 AR_wing = 7; % the same for individual wing as both wings combined since using the same size wing
 CL0_w = cl0_w; % Wing CL0
 Cm0_w = cm0_w; % from clark y
+CM0 = Cm0_w;
 CLa_w = cla_w / (1 + cla_w / (pi() * AR_wing));
 CL_max_w = 0.9 * cl_max_w;
+
+K_w = 1./(pi() * e * AR_wing);
 
 %% Tail Characteristics
 AR_tail = 4;
 CL0_t = cl0_t; % Tail CL0
 CLa_t = cla_t / (1 + cla_t / (pi() * AR_wing)); % found in lecture notes
 CL_max_t = 0.9 * cl_max_t;
+
 de_da = CLa_w / (pi*AR_wing);
+K_t = 1./(pi() * e * AR_tail);
 
 %% Aircraft Coefficients
 CL_max = CL_max_w + Sh_S * CL_max_t;
@@ -102,4 +101,15 @@ D_f = 0.08; % Diameter of the fuselage
 lambda_f = 5.1; %fineness/slenderness ratio, 5.1 is optimal per Sadraey
 
 %% Control Surface
-E = 0.3; % Elevator Tail Percent, cl/ct where cl is length of tail and ct and c
+SE_Sh = 0.4; % Elevator surface Area / lifting surface (horzontal tail) area [0.2 - 0.4]
+SA_S = 0.12; % Aileron surface Area / lifting surface (wing) area [0.03 - 0.12]
+SR_Sv = 0.35; % Rudder surface Area / lifting surface (vertical tail) area [0.15 - 0.35]
+
+CE_Ch = 0.4; % Elevator chord / lifting surface chord [0.2 - 0.4]
+CA_C = 0.3; % Aileron chord / lifting surface chord [0.15 - 0.3]
+
+%% L/D
+LD_max = 1 / (2 * sqrt(K_w * CD_0));
+LD_CR = 12.3; % lift to drag ratio in level flight
+LD_M = 11; % lift to drag ratio in turning flight
+LD_CL = 10; % lift to drag ratio in climb

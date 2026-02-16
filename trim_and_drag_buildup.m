@@ -1,10 +1,9 @@
+
 CL_req = linspace(-1,2,1000);
 
-x_cg_chosen = (x_cg_aft + x_cg_forward) * 0.5;
 VH = Sh_S * lt_c;
 
-CL_det = CLa_t/pi() * (acos(1-2*E) + 2*sqrt(E*(1-E)));
-CM0 = Cm0_w;
+CL_det = CLa_t/pi() * (acos(1-2*SE_Sh) + 2*sqrt(SE_Sh*(1-SE_Sh)));
 CL_de = Sh_S * CL_det;
 
 CM_de = CL_det * Sh_S * (x_cg_chosen - x_ac) - CL_det * VH;
@@ -96,9 +95,6 @@ CL_w = CL0_w + CLa_w *  deg2rad(a_trim);
 
 CL_t_trim = CL0_t + CLa_t *  deg2rad(a_trim) + CL_de * deg2rad(de_trim);
 CL_t_clean = CL0_t + CLa_t *  deg2rad(a_trim);
-
-K_w = 1./(pi() * e * AR_wing);
-K_t = 1./(pi() * e * AR_tail);
 
 CD_clean = CD_0 + K_w .* CL_w.^2 + Sh_S .* CL_t_clean.^2 .* K_t;
 CD_trim =  CD_0 + K_w .* CL_w.^2 +  CL_t_trim.^2 * Sh_S .* K_t;

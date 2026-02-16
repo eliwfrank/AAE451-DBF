@@ -64,5 +64,9 @@ E_WU = (WB_W_WU*weight_TO) * rho_B;
 E_total = (E_LF + E_TF + E_CL + E_TO + E_WU)/(etaTemp*etaUse);
 
 fprintf("Total Weight is: %f [N] or %.4f [kg]\n",weight_TO,weight_TO/g)
+fprintf("Empty Weight is: %f [N] or %.4f [kg]\n",w_e,w_e/g)
+fprintf("Battery Weight is: %f [N] or %.4f [kg]\n",w_b,w_b/g)
+
+
 
 

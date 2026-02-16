@@ -11,3 +11,4 @@ wing_thickness_cm = 100* 0.117*c; % thickness is 11.7% of chord for the clark y
 
 fprintf("Wing Chord length: %.4f [m]\nWing Span: %.4f [m]\n",c,b)
 fprintf("Wing thickness: %.4f [cm]\n",wing_thickness_cm);
+fprintf("Wing Area: %.4f [cm]\n",wing_area_total);

@@ -65,6 +65,8 @@ Cm_req_rot = 0.2; % [0.1 to 0.2] dependant on your configuration and the positio
 CLa_t = 6.86 ; % tail CLa per radian
 aoa_tail_stall = deg2rad(12.25); % Stall angle of attack
 lt = 1; % Tail Arm
+Lambda_m_vtail = .405; %sweep angle of vertical tail
+
 
 %% Airfoil Characteristics
 x_c_max = 0.3;
@@ -74,3 +76,8 @@ CL0_w = 0.36; % Wing CL0
 E = 0.3; % Elevator Tail Percent, cl/ct where cl is length of tail and ct and c
 t_c_tail = 0.12;
 
+%% Fuselage Design
+D_f = 0.08; % Diameter of the fuselage
+lambda_f = 5.1; %fineness/slenderness ratio, 5.1 is optimal per Sadraey
+
+%% Landing Gear

@@ -1,5 +1,5 @@
 clear
-clc
+% clc
 close all
 
 run("param.m") 
@@ -11,4 +11,4 @@ run("trim_and_drag_buildup.m")
 
 run("prop_system.m")
 run("battery_sizing.m")
-% close all
+close all

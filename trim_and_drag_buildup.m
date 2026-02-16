@@ -30,8 +30,6 @@ title("Trim Elevator Deflection vs. Trim Lift Coefficient")
 grid on
 
 %% FUSELAGE
-lambda_f = 5.1; %fineness/slenderness ratio, 5.1 is optimal per Sadraey
-D_f = 0.08;
 l_f = D_f* lambda_f; % fuselage diameter
 FF_f = 0.9 + (5/lambda_f^1.5) + lambda_f/400; %fuselage form factor
 S_wet_f = 1.02*((2*c*D_f) + 4*(c*l_f));
@@ -50,8 +48,6 @@ Re_w = rho * V_CR * c / mu_air; %Reynolds number with chord as ref length
 C_f_w = 0.455 / (log10(Re_w))^2.58;
 
 %% TAIL
-
-Lambda_m_vtail = .405; %sweep angle of vertical tail
 FF_ht = (1 + 0.6/(x_c_max)*(t_c_tail) + 100*(t_c_tail)^4) * (1.34*M^0.18*(cos(Lambda_m))^0.28); %horizontal tail form factor
 S_wet_ht = tail_area_h * 2 * (1.02); %wetted area of horizontal tail
 
@@ -81,8 +77,8 @@ S_ref = wing_area_total;
 C_D_0_f = (FF_f * Q_f * C_f_f * S_wet_f) / S_ref;
 C_D_0_w = (FF_w * Q_w * C_f_w * S_wet_w) / S_ref;
 C_D_0_ht = (FF_ht * Q_t * C_f_t * S_wet_ht) / S_ref;
-C_D_0_lg_nose = 1/2 * (wheel_diameter*wheel_width) * CD_S_nose / S_ref;
-C_D_0_lg_main = 1/2 * (wheel_diameter*wheel_width) * CD_S_nose / S_ref;
+C_D_0_lg_nose = 1/2 * (wheel_diameter*wheel_width) * CD_S_nose / S_ref; % Landing gear
+C_D_0_lg_main = 1/2 * (wheel_diameter*wheel_width) * CD_S_nose / S_ref; % Landing gear
 C_D_0_vt = (FF_vt * Q_t * C_f_t * S_wet_vt) / S_ref;
 
 %TOTAL PARASITIC DRAG

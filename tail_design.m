@@ -41,7 +41,6 @@ V_ht = (1*tail_area_h)/(c*wing_area_total);
 % c_tail_v_tip  = lambda_vt * c_tail_v_root;
 
 VC_vt = 0.04; % chosen from values in lecture
-lt = 1; % same as horizontal tail arm
 lambda_vt = 0.4;
 tail_area_v = (VC_vt*b*wing_area_total)/(lt);
 AR_vt = 2; % chosen from values 

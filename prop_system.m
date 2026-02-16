@@ -1,10 +1,10 @@
 %% power equations
 % iterating through to find battery power required
-P_req_mech = W_int/W_P;
+P_req_mech = weight_TO/W_P;
 P_req_bat = P_req_mech/(etaM*etaESC);
 
 % this is how these would change if our weight increased by 50 percent
-P_req_mech_50 = (W_int*1.5)/(W_P);
+P_req_mech_50 = (weight_TO*1.5)/(W_P);
 P_req_bat_50 = P_req_mech_50/(etaM*etaESC);
 fprintf("\nPOWER REQUIREMENTS ------------------------\n")
 
@@ -14,11 +14,11 @@ fprintf("Battery Power Required: %.4f [W]\n",P_req_bat);
 % calculating static thrust CLr = CLTo
 L_TO =  0.7*V_TO; % estimate for static thrust
 D_TO = 0.7*V_TO; 
-T_0 = ((W_int*(V_TO^2))/(2*g*S_TO)) + D_TO + mu_ground*(W_int - L_TO);
+T_0 = ((weight_TO*(V_TO^2))/(2*g*S_TO)) + D_TO + mu_ground*(weight_TO - L_TO);
 
 fprintf("Estimated Static Thrust: %.4f [N]\n",T_0);
 
-CL_CR = W_int/(0.5*rho*(V_CR^2)*wing_area_total);
+CL_CR = weight_TO/(0.5*rho*(V_CR^2)*wing_area_total);
 CD_i = (CL_CR^2)/(pi()*AR_wing*e);
 % calculating cruise thrust
 C_D = CD_0 + CD_i; % add aditional C_Ds after calcualtion, cdi and cdwave
@@ -31,9 +31,9 @@ velocity_array = linspace(0,28,1000);
 cl_array = zeros(size(velocity_array)); 
 for i = 1:length(velocity_array)
     if velocity_array(i) <= V_TO % for before v takeoff make the value constant
-        cl_array(i) = (2*W_int)/(rho*wing_area_total*(V_TO^2));
+        cl_array(i) = (2*weight_TO)/(rho*wing_area_total*(V_TO^2));
     else
-        cl_array(i) = (2 * W_int) / ...
+        cl_array(i) = (2 * weight_TO) / ...
                       ((rho * (velocity_array(i)^2)) * wing_area_total); % calculating cl
     end
 end

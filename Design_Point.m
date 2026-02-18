@@ -6,19 +6,19 @@ wingloading_stall = 0.5 * rho * V_si^2 * CL_max;
 
 %% Cruise Constraint
 wingloading_CR = linspace(0,num_vals,1000);
-powerloading_CR = ((etaP_CR * phi) / (0.5 * rho * 1.1 * CD_0 * V_CR^3)) * wingloading_CR;
+powerloading_CR = ((etaP_CRi * phi) / (0.5 * rho * 1.1 * CD_0i * V_CR^3)) * wingloading_CR;
 
 %% Climb Constraint
-powerloading_CL = etaP_CL / (V_CL * ( (1 / (0.866 * LD_max)) + sind(gamma)));
+powerloading_CL = etaP_CLi / (V_CL * ( (1 / (0.866 * LD_max)) + sind(gamma)));
  
 %% Maneuver Constraint
 wingloading_M = linspace(1e-8,num_vals,1000);
-powerloading_M = etaP_M ./ (q * V_M * (CD_0 ./ wingloading_M + 1/(pi * AR_wing * e) * (n/q)^2 * wingloading_M));
+powerloading_M = etaP_Mi ./ (q * V_M * (CD_0i ./ wingloading_M + 1/(pi * AR_wing * e) * (n/q)^2 * wingloading_M));
 
 %% Takeoff Constraint
 wingloading_TO = linspace(1e-8,num_vals,1000);
 exp_term = exp(0.6 .* rho .* g .* CD_G .* S_TO .* 1 ./ wingloading_TO);
-powerloading_TO = (etaP_TO ./ V_TOi) .* (1 - exp_term) ./ (mu_ground - (mu_ground + CD_G ./ CL_Ri) .* exp_term);
+powerloading_TO = (etaP_TOi ./ V_TOi) .* (1 - exp_term) ./ (mu_ground - (mu_ground + CD_G ./ CL_Ri) .* exp_term);
 
 %% Plot
 figure()

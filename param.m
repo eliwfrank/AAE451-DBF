@@ -3,9 +3,7 @@ rho = 1.20343; % Air density [kg/m^3]
 g = 9.81; % [m/s^2]
 mu_ground = 0.04; % Ground friction coefficient
 mu_air = 1.73e-5;
-
 n = 1.2; % turning flight load factor
-
 
 %% Velocities
 V_si = 10; % Stall Velocity [m/s], recalculated in Design Point.
@@ -16,15 +14,15 @@ V_CR = 18; % Cruise Velocity
 V_CL = 13; % Climb Velocity
 
 %% Coefficients
-CD_0 = 0.0344; % Parasitic Drag Coefficient
-CD_G = .0875; % Ground Drag Coefficient
+CD_0i = 0.0344; % Parasitic Drag Coefficient
 CL_Ri = 1.0541; % CL at rotation - recalculated, 
+CD_G = .0875; % Ground Drag Coefficient
 
 %% Efficiencies
-etaP_CR = 0.6595; % Cruise/level flight Propellor Efficiency, calculated in prop system periodically update
-etaP_TO = 0.5024; % TO prop efficiency, calculated in prop system periodically update
-etaP_CL = 0.5490; % Climb Propellor efficiency, calculated in prop system periodically update
-etaP_M = 0.6418; % maneuvering propeller efficiency, calculated in prop system periodically update
+etaP_CRi = 0.6595; % Cruise/level flight Propellor Efficiency, calculated in prop system periodically update
+etaP_TOi = 0.5024; % TO prop efficiency, calculated in prop system periodically update
+etaP_CLi = 0.5490; % Climb Propellor efficiency, calculated in prop system periodically update
+etaP_Mi = 0.6418; % maneuvering propeller efficiency, calculated in prop system periodically update
 
 etaM = 0.8; % motor efficiency
 etaESC = 0.95; % ESC efficiency
@@ -45,7 +43,6 @@ e = 0.85; % Oswald Efficiency Factor
 q = 0.5 * rho * V_M^2;
 S_TO = 22.5; % TO run [m]
 rho_B = 527000/g; % batter energy density (J/N)
-n = 1.2; % turning flight load factor
 N = 10; % multiple of takeoff time, warmup
 w_p = 5.1012; % weight of payload in newtons
 
@@ -113,7 +110,7 @@ CE_Ch = 0.4; % Elevator chord / lifting surface chord [0.2 - 0.4]
 CA_C = 0.3; % Aileron chord / lifting surface chord [0.15 - 0.3]
 
 %% L/D
-LD_max = 1 / (2 * sqrt(K_w * CD_0));
+LD_max = 1 / (2 * sqrt(K_w * CD_0i));
 LD_CR = 12.3; % lift to drag ratio in level flight
 LD_M = 11; % lift to drag ratio in turning flight
 LD_CL = 10; % lift to drag ratio in climb

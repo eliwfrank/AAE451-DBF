@@ -93,7 +93,7 @@ fprintf("\nTotal CD0: %.4f\n", CD_0)
 
 CL_w = CL0_w + CLa_w *  deg2rad(a_trim);
 
-CL_t_trim = CL0_t + CLa_t *  deg2rad(a_trim) + CL_de * deg2rad(de_trim);
+CL_t_trim = CL0_t + CLa_t *  deg2rad(a_trim) - CL_de * deg2rad(de_trim);
 CL_t_clean = CL0_t + CLa_t *  deg2rad(a_trim);
 
 CD_clean = CD_0 + K_w .* CL_w.^2 + Sh_S .* CL_t_clean.^2 .* K_t;

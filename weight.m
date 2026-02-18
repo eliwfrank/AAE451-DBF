@@ -2,13 +2,13 @@
 fprintf("\nWEIGHT ------------------------\n")
 
 % level flight/cruise
-WB_W_LF = (V_CR*t_CR)/(LD_CR*etaP_CR*etaM*etaESC*rho_B);
+WB_W_LF = (V_CR*t_CR)/(LD_CR*etaP_CRi*etaM*etaESC*rho_B);
 
 % turning flight/maneuver
-WB_W_TF = (V_M*t_M*n)/(LD_M*etaP_M*etaM*etaESC*rho_B);
+WB_W_TF = (V_M*t_M*n)/(LD_M*etaP_Mi*etaM*etaESC*rho_B);
 
 % climb
-WB_W_CL = ((V_CL*t_CL)/(etaP_CL*etaM*etaESC*rho_B))*(((cosd(gamma))/(LD_CL)) + sind(gamma));
+WB_W_CL = ((V_CL*t_CL)/(etaP_CLi*etaM*etaESC*rho_B))*(((cosd(gamma))/(LD_CL)) + sind(gamma));
 
 % takeoff
 WB_W_TO = t_TO/(etaM*etaESC*rho_B*W_P);
@@ -20,7 +20,7 @@ WB_W_WU = N*(WB_W_TO); % takeoff battery weight fraction
 WB_W_total = WB_W_TO + WB_W_WU + WB_W_CL + WB_W_LF + WB_W_TF;
 
 % accounting for efficiencies 
-WB_W_eff= WB_W_total/(etaP_CR*etaM*etaESC*etaUse*etaTemp);
+WB_W_eff= WB_W_total/(etaP_CRi*etaM*etaESC*etaUse*etaTemp);
 
 % finding the empty weight
 W = linspace(0, 100, 1000);

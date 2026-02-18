@@ -5,7 +5,7 @@ mu_ground = 0.04; % Ground friction coefficient
 mu_air = 1.73e-5;
 
 %% Velocities
-V_s = 10; % Stall Velocity [m/s]
+V_si = 9.4868; % Stall Velocity [m/s], recalculated in Design Point. Periodically check similarity
 V_M = 17; % Maneuver Velocity [m/s]
 V_CR = 18; % Cruise Velocity
 V_CL = 13; % Climb Velocity
@@ -48,9 +48,9 @@ w_p = 5.1012; % weight of payload in newtons
 %% Tail Sizing
 SM = 0.2; % Static Margin
 x_ac = 0.25; % Aerodynamic Center of the Wing
-Sh_S = 0.085;
+Sh_S = 0.15;
 CLt_nose_up = -0.8; % [-0.5 to -0.8] max negative tail lift for nose up control
-Cm_req_rot = 0.2; % [0.1 to 0.2] dependant on your configuration and the position of the main landing gear
+Cm_req_rot = 0.25; % [0.1 to 0.2] dependant on your configuration and the position of the main landing gear
 lt = 1; % Tail Arm
 Lambda_m_vtail = .405; %sweep angle of vertical tail
 

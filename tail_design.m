@@ -70,8 +70,12 @@ fprintf("\nCG LOCATION ------------------------\n")
 
 fprintf("Forward Limit: x_cg/c = %.4f, Sh/S = %.3f\n",x_cg_forward, Sh_S)
 fprintf("Aft Limit: x_cg/c = %.4f, Sh/S = %.3f\n",x_cg_aft, Sh_S)
+
+if isnan(x_cg_forward)
+    x_cg_forward = 0;
+end
 fprintf("Static Margin: %.4f\n",x_cg_aft - x_cg_forward)
-x_cg_chosen = (x_cg_aft + x_cg_forward) * 0.5;
+x_cg_chosen = (x_cg_aft - x_cg_forward) * 0.5;
 fprintf("Chosen cg location: x_cg/c = %.4f\n",x_cg_chosen)
 
 fprintf("\nTAIL SIZING ------------------------\n")

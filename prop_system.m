@@ -26,7 +26,7 @@ D_cr = 0.5*C_D*rho*(V_CR^2)*wing_area_total;
 T_cr = D_cr;
 
 % plotting thrust and drag vs airspeed
-velocity_array = linspace(0,28,1000);
+velocity_array = linspace(0,30,1000);
 % for loop for calculating the cl array at different velocities
 cl_array = zeros(size(velocity_array)); 
 for i = 1:length(velocity_array)
@@ -42,152 +42,96 @@ cdi_array = (cl_array.^2)/(pi()*AR_wing*e);
 D_i = cdi_array.*0.5*rho.*(velocity_array.^2);
 D_0 = 0.5*CD_0*rho.*((velocity_array).^2).*wing_area_total;
 D_array = D_0 + D_i;
-% values from chosen prop system - 11X55E at 12,000 RPM
-velocity_fromprop_10 = [0.000 
-1.033
-2.065
-3.098
-4.131
-5.163
-6.196
-7.230
-8.263
-9.296
-10.328
-11.363
-12.396
-13.429
-14.462
-15.494
-16.528
-17.561
-18.594
-19.627
-20.659
-21.693
-22.726
-23.759
-24.792
-25.824
-26.858
-27.891
-28.924];
+% values from chosen prop system - 12X6E at 9,989 RPM
+velocity_fromprop_10 = [0.000
+1.127
+2.253
+3.384
+4.510
+5.637
+6.763
+7.897
+9.022
+10.148
+11.274
+12.410
+13.533
+14.659
+15.785
+16.910
+18.036
+19.162
+20.295
+21.421
+22.543
+23.673
+24.800
+25.927
+27.053
+28.180
+29.307
+30.435
+31.571];
 
-velocity_fromprop_11 = [0.000
-1.136
-2.275
-3.411
-4.547
-5.682
-6.821
-7.957
-9.093
-10.232
-11.368
-12.504
-13.640
-14.779
-15.915
-17.051
-18.190
-19.326
-20.462
-21.598
-22.737
-23.873
-25.009
-26.148
-27.284
-28.420
-29.559
-30.695
-31.831];
+thrust_fromprop_10 = [27.785
+27.328
+26.837
+26.311
+25.747
+25.145
+24.503
+23.819
+23.092
+22.322
+21.508
+20.649
+19.747
+18.801
+17.813
+16.781
+15.708
+14.598
+13.457
+12.287
+11.093
+9.879
+8.648
+7.404
+6.152
+4.898
+3.647
+2.405
+1.181];
 
-thrust_fromprop_10 = [20.372
-20.026
-19.655
-19.259
-18.836
-18.385
-17.906
-17.397
-16.858
-16.288
-15.688
-15.056
-14.394
-13.701
-12.977
-12.223
-11.440
-10.632
-9.802
-8.952
-8.085
-7.204
-6.311
-5.408
-4.499
-3.588
-2.678
-1.775
-0.882];
+V_75per = velocity_fromprop_10.*0.75;
+V_50per = velocity_fromprop_10.*0.50;
+V_25per = velocity_fromprop_10.*0.25;
 
-thrust_fromprop_11 = [24.786
-24.366
-23.917
-23.436
-22.923
-22.375
-21.793
-21.175
-20.519
-19.826
-19.096
-18.327
-17.521
-16.677
-15.796
-14.878
-13.924
-12.940
-11.928
-10.893
-9.837
-8.763
-7.674
-6.575
-5.467
-4.357
-3.248
-2.147
-1.060];
+T_75per = thrust_fromprop_10.*0.75;
+T_50per = thrust_fromprop_10.*0.50;
+T_25per = thrust_fromprop_10.*0.25;
 
-% interpolation for rpm
-rpm_low  = 10000;
-rpm_high = 11000;   % example
+% Find intersection of 100% throttle thrust and drag
 
-rpm_target = 10721;
+T_interp = interp1(velocity_fromprop_10, thrust_fromprop_10, ...
+                   velocity_array, 'linear', 'extrap');
 
-interp = (rpm_target - rpm_low) / (rpm_high - rpm_low);
+diff_T_D = T_interp - D_array;
 
-V_10721 = velocity_fromprop_10 + interp * (velocity_fromprop_11 - velocity_fromprop_10);
-V_75per = V_10721.*0.75;
-V_50per = V_10721.*0.50;
-V_25per = V_10721.*0.25;
+idx = find(diff_T_D(1:end-1).*diff_T_D(2:end) <= 0, 1, 'first');
 
-T_10721  = thrust_fromprop_10  + interp * (thrust_fromprop_11  - thrust_fromprop_10);
-T_75per = T_10721.*0.75;
-T_50per = T_10721.*0.50;
-T_25per = T_10721.*0.25;
+V_max = interp1(diff_T_D(idx:idx+1), velocity_array(idx:idx+1), 0);
+fprintf("Maximum Velocity (Thrust = Drag): %.4f [m/s]\n", V_max);
 
 figure();
-plot(V_10721, T_10721, "m-", linewidth = 1.5);
+plot(velocity_fromprop_10, thrust_fromprop_10, "m-", linewidth = 1.5);
 hold on
 plot(V_75per, T_75per, "m-.", linewidth = 1.5);
 plot(V_50per, T_50per, "m:", linewidth = 1.5);
 plot(V_25per, T_25per, "m--", linewidth = 1.5);
 plot(velocity_array, D_array, "g-", linewidth = 1.5);
+plot(V_max, interp1(velocity_array, D_array, V_max), ...
+     'bo', 'MarkerSize', 8, linewidth = 2);
 title("Drag and Thrust vs Airspeed");
 ylabel("Forces (N)");
 xlabel('Airspeed (m/s)');
@@ -197,73 +141,42 @@ grid on;
 
 % plotting propeller efficiency vs airspeed
 n_p_fromprop_10 = [0.0000
-0.0630
-0.1226
-0.1790
-0.2322
-0.2823
-0.3294
-0.3736
-0.4149
-0.4535
-0.4894
-0.5226
-0.5531
-0.5810
-0.6062
-0.6286
-0.6480
-0.6643
-0.6772
-0.6861
-0.6906
-0.6898
-0.6824
-0.6668
-0.6403
-0.5987
-0.5350
-0.4366
-0.2785];
+0.0646
+0.1257
+0.1834
+0.2377
+0.2888
+0.3367
+0.3817
+0.4236
+0.4627
+0.4991
+0.5327
+0.5637
+0.5919
+0.6175
+0.6402
+0.6601
+0.6768
+0.6901
+0.6996
+0.7047
+0.7046
+0.6980
+0.6833
+0.6576
+0.6168
+0.5533
+0.4536
+0.2898];
 
-n_p_fromprop_11 = [0.0000
-0.0633
-0.1232
-0.1799
-0.2333
-0.2837
-0.3310
-0.3755
-0.4170
-0.4559
-0.4920
-0.5255
-0.5563
-0.5845
-0.6101
-0.6328
-0.6526
-0.6694
-0.6827
-0.6922
-0.6973
-0.6972
-0.6906
-0.6759
-0.6502
-0.6094
-0.5462
-0.4474
-0.2859];
 
-np_10721 = n_p_fromprop_10 + interp * (n_p_fromprop_11 - n_p_fromprop_10); % 100% throttle
-np_75per = np_10721.*0.75;
-np_50per = np_10721.*0.50;
-np_25per = np_10721.*0.25;
+np_75per = n_p_fromprop_10.*0.75;
+np_50per = n_p_fromprop_10.*0.50;
+np_25per = n_p_fromprop_10.*0.25;
 
 figure();
-
-plot(V_10721, np_10721, "c-", linewidth = 1.5);
+plot(velocity_fromprop_10, n_p_fromprop_10, "c-", linewidth = 1.5);
 hold on
 plot(V_75per, np_75per, "c-.", linewidth = 1.5);
 plot(V_50per, np_50per, "c:", linewidth = 1.5);
@@ -278,20 +191,20 @@ fprintf("Thrust: %f [N]\n", T_cr)
 
 % plotting minimum power required vs airspeed
 
-P_mech_min_100 = (T_10721.*V_10721)./(np_10721);
+P_mech_min_100 = (thrust_fromprop_10.*velocity_fromprop_10)./(n_p_fromprop_10);
 P_elec_min_100 = (P_mech_min_100)./(etaM*etaESC); % converting mechanical power to electrical
 
-P_mech_min_75 = (T_10721.*V_10721)./(np_10721);
+P_mech_min_75 = (T_75per.*V_75per)./(np_75per);
 P_elec_min_75 = (P_mech_min_100)./(etaM*etaESC); % converting mechanical power to electrical
 
-P_mech_min_50 = (T_10721.*V_10721)./(np_10721);
+P_mech_min_50 = (T_50per.*V_50per)./(np_50per);
 P_elec_min_50 = (P_mech_min_100)./(etaM*etaESC); % converting mechanical power to electrical
 
-P_mech_min_25 = (T_10721.*V_10721)./(np_10721);
+P_mech_min_25 = (T_25per.*V_25per)./(np_25per);
 P_elec_min_25 = (P_mech_min_100)./(etaM*etaESC); % converting mechanical power to electrical
 
 figure();
-plot(V_10721, P_elec_min_100, "b-", LineWidth=1.5);
+plot(velocity_fromprop_10, P_elec_min_100, "b-", LineWidth=1.5);
 hold on
 plot(V_75per, P_elec_min_75, "b-.", LineWidth=1.5);
 plot(V_50per, P_elec_min_50, "b:", LineWidth=1.5);

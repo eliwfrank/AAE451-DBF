@@ -1,9 +1,8 @@
 fprintf("WING AND POWER LOADING ------------------------\n")
-
 num_vals = 100;
 
 %% Stall Constraint
-wingloading_stall = 0.5 * rho * V_s^2 * CL_max;
+wingloading_stall = 0.5 * rho * V_si^2 * CL_max;
 
 %% Cruise Constraint
 wingloading_CR = linspace(0,num_vals,1000);
@@ -43,3 +42,5 @@ legend("Stall","Cruise","Climb","Maneuver","Takeoff","Design Point",Location="no
 title("Aircraft Constraint Diagram")
 ylabel("Power Loading (W/P) [N/W]")
 xlabel("Wing Loading (W/S) [N/m^2]")
+
+V_s = sqrt(W_S / (.5 * rho * CL_max));

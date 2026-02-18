@@ -18,7 +18,7 @@ powerloading_M = etaP_M ./ (q * V_M * (CD_0 ./ wingloading_M + 1/(pi * AR_wing *
 %% Takeoff Constraint
 wingloading_TO = linspace(1e-8,num_vals,1000);
 exp_term = exp(0.6 .* rho .* g .* CD_G .* S_TO .* 1 ./ wingloading_TO);
-powerloading_TO = (etaP_TO ./ V_TO) .* (1 - exp_term) ./ (mu_ground - (mu_ground + CD_G ./ CL_R) .* exp_term);
+powerloading_TO = (etaP_TO ./ V_TOi) .* (1 - exp_term) ./ (mu_ground - (mu_ground + CD_G ./ CL_Ri) .* exp_term);
 
 %% Plot
 figure()
@@ -44,3 +44,4 @@ ylabel("Power Loading (W/P) [N/W]")
 xlabel("Wing Loading (W/S) [N/m^2]")
 
 V_s = sqrt(W_S / (.5 * rho * CL_max));
+V_TO = n * V_s; % TO velocity [m/s]

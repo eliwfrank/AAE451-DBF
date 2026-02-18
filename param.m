@@ -4,23 +4,27 @@ g = 9.81; % [m/s^2]
 mu_ground = 0.04; % Ground friction coefficient
 mu_air = 1.73e-5;
 
+n = 1.2; % turning flight load factor
+
+
 %% Velocities
-V_si = 9.4868; % Stall Velocity [m/s], recalculated in Design Point. Periodically check similarity
+V_si = 10; % Stall Velocity [m/s], recalculated in Design Point.
+V_TOi = n * V_si; % TO velocity [m/s]
+
 V_M = 17; % Maneuver Velocity [m/s]
 V_CR = 18; % Cruise Velocity
 V_CL = 13; % Climb Velocity
-V_TO = 12; % TO velocity [m/s]
 
 %% Coefficients
-CD_0 = 0.0343; % Parasitic Drag Coefficient
+CD_0 = 0.0344; % Parasitic Drag Coefficient
 CD_G = .0875; % Ground Drag Coefficient
-CL_R = 0.9375; % CL at rotation - recalculated, 
+CL_Ri = 1.0541; % CL at rotation - recalculated, 
 
 %% Efficiencies
-etaP_CR = 0.65; % Cruise/level flight Propellor Efficiency
-etaP_TO = 0.5; % TO prop efficiency
-etaP_CL = 0.5; % Climb Propellor efficiency
-etaP_M = 0.65; % maneuvering propeller efficiency
+etaP_CR = 0.6595; % Cruise/level flight Propellor Efficiency, calculated in prop system periodically update
+etaP_TO = 0.5024; % TO prop efficiency, calculated in prop system periodically update
+etaP_CL = 0.5490; % Climb Propellor efficiency, calculated in prop system periodically update
+etaP_M = 0.6418; % maneuvering propeller efficiency, calculated in prop system periodically update
 
 etaM = 0.8; % motor efficiency
 etaESC = 0.95; % ESC efficiency

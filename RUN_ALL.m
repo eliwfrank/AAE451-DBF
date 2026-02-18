@@ -13,4 +13,5 @@ run("prop_system.m")
 run("battery_sizing.m")
 run("control_surface_and_servo.m")
 run("vn_diagram.m")
+
 close all

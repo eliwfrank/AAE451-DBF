@@ -12,7 +12,7 @@ Cm_req_rec = -CL_max * SM + Cm0_w;
 stall_recovery_STS = (Cm0_w + CL_max * (x_cg - x_ac) - Cm_req_rec) ./ (CLt_nose_down * etaH * (lt_c - x_cg + x_ac));
 
 %% TO Rotation, nose up control
-takeoff_rot_STS = (Cm0_w + CL_R * (x_cg - x_ac) - Cm_req_rot) ./ (CLt_nose_up * etaH * (lt_c - x_cg + x_ac));
+takeoff_rot_STS = (Cm0_w + CL_Ri * (x_cg - x_ac) - Cm_req_rot) ./ (CLt_nose_up * etaH * (lt_c - x_cg + x_ac));
 
 %% Aft Limit (stability, SM = 0)
 aft_lim_STS = (x_cg - x_ac - 0) ./ (etaH .* (1 - de_da) .* lt_c - (x_cg - x_ac + 0));

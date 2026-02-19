@@ -1,14 +1,14 @@
 
 x_cg = linspace(0,1,10000);
-x_np = SM + x_cg;
+x_np = SMi + x_cg;
 lt_c = lt/c;
 
 %% forward limit (stability)
-forward_lim_STS = (x_cg - x_ac + SM) ./ (etaH * (1 - de_da) * lt_c - (x_cg - x_ac + SM));
+forward_lim_STS = (x_cg - x_ac + SMi) ./ (etaH * (1 - de_da) * lt_c - (x_cg - x_ac + SMi));
 
 %% stall recovery control
 CLt_nose_down = CLa_t * aoa_tail_stall; % nose down
-Cm_req_rec = -CL_max * SM + Cm0_w;
+Cm_req_rec = -CL_max * SMi + Cm0_w;
 stall_recovery_STS = (Cm0_w + CL_max * (x_cg - x_ac) - Cm_req_rec) ./ (CLt_nose_down * etaH * (lt_c - x_cg + x_ac));
 
 %% TO Rotation, nose up control
@@ -22,7 +22,8 @@ x_cg_aft = interp1(forward_lim_STS, x_cg,Sh_S);
 tail_area_h = Sh_S * wing_area_total;
 b_tail_h = sqrt(tail_area_h * AR_tail);
 c_tail_h = tail_area_h / b_tail_h;
-V_ht = (1*tail_area_h)/(c*wing_area_total);
+
+V_ht = Sh_S * lt_c;
 
 %% Vertical Tail Area
 % VC_vt = 0.03;                 % chosen from values in lecture
@@ -60,8 +61,10 @@ yline(Sh_S)
 plot(x_cg_forward,Sh_S,"r.",markersize=20)
 plot(x_cg_aft,Sh_S,"r.",markersize=20)
 plot([x_cg_forward x_cg_aft], [Sh_S Sh_S], 'r-', 'LineWidth',2)
-plot(0.258426,0.0472219,"r.",markersize=20)
-legend("Forward limit (stability)","Aft Limit (Stall recovery control)","Forward Limit (Nose-up Control)","Aft Limit (Stability, SM = 0)","selected S_h/S","Forward Limit","Aft Limit","Feasible cg range", "Intersection Point")
+% plot(0.258426,0.0472219,"r.",markersize=20)
+legend("Forward limit (stability)","Aft Limit (Stall recovery control)","Forward Limit (Nose-up Control)","Aft Limit (Stability, SM = 0)","selected S_h/S","Forward Limit","Aft Limit","Feasible cg range",Location="southoutside",NumColumns=4)
+% legend("Forward limit (stability)","Aft Limit (Stall recovery control)","Forward Limit (Nose-up Control)","Aft Limit (Stability, SM = 0)","selected S_h/S","Forward Limit","Aft Limit","Feasible cg range", "Intersection Point")
+
 title("Scissor Plot")
 ylabel("S_h/S (Horizontal Tail Area Ratio)")
 xlabel("x_{cg}/c (Center of Gravity Position)")
@@ -74,8 +77,9 @@ fprintf("Aft Limit: x_cg/c = %.4f, Sh/S = %.3f\n",x_cg_aft, Sh_S)
 if isnan(x_cg_forward)
     x_cg_forward = 0;
 end
+
 fprintf("Static Margin: %.4f\n",x_cg_aft - x_cg_forward)
-x_cg_chosen = (x_cg_aft - x_cg_forward) * 0.5;
+x_cg_chosen = (x_cg_aft + x_cg_forward) /2;
 fprintf("Chosen cg location: x_cg/c = %.4f\n",x_cg_chosen)
 
 fprintf("\nTAIL SIZING ------------------------\n")
@@ -85,3 +89,7 @@ fprintf("Vertical Stabilizer Area:  %.4f [m^2]\n", tail_area_v);
 fprintf("Vertical Stabilizer Span:  %.4f [m^2]\n", b_tail_v);
 fprintf("Vertical Stabilizer Root Chord:  %.4f [m^2]\n", c_tail_v_root);
 fprintf("Vertical Stabilizer Tip Chord:  %.4f [m^2]\n", c_tail_v_tip);
+
+VH = Sh_S * lt_c;
+xn = x_ac + (etaH * CLa_t * (1 - de_da) * VH ) / (CLa_w + Sh_S * CLa_t * (1 - de_da));
+SM = xn - x_cg_chosen;

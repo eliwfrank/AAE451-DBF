@@ -14,7 +14,7 @@ V_CR = 18; % Cruise Velocity
 V_CL = 13; % Climb Velocity
 
 %% Coefficients
-CD_0i = 0.0344; % Parasitic Drag Coefficient
+CD_0i = 0.0383; % Parasitic Drag Coefficient
 CL_Ri = 1.0541; % CL at rotation - recalculated, 
 CD_G = .0875; % Ground Drag Coefficient
 
@@ -47,7 +47,7 @@ N = 10; % multiple of takeoff time, warmup
 w_p = 5.1012; % weight of payload in newtons
 
 %% Tail Sizing
-SM = 0.2; % Static Margin
+SMi = 0.2; % Static Margin
 x_ac = 0.25; % Aerodynamic Center of the Wing
 Sh_S = 0.15;
 CLt_nose_up = -0.8; % [-0.5 to -0.8] max negative tail lift for nose up control
@@ -98,7 +98,7 @@ CL_a = CLa_w + Sh_S * CLa_t * (1 - de_da);
 CL_0 = CL0_w + Sh_S * CL0_t;
 
 %% Fuselage Design
-D_f = 0.08; % Diameter of the fuselage
+D_f = 0.1; % Diameter of the fuselage
 lambda_f = 5.1; %fineness/slenderness ratio, 5.1 is optimal per Sadraey
 
 %% Control Surface

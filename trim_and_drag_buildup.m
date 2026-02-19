@@ -32,7 +32,8 @@ Re = rho * V_CR * c / mu_air; %Reynolds number with chord as ref length
 %% FUSELAGE
 l_f = D_f* lambda_f; % fuselage diameter
 FF_f = 0.9 + (5/lambda_f^1.5) + lambda_f/400; %fuselage form factor
-S_wet_f = 1.02*((2*c*D_f) + 4*(c*l_f));
+h_f = c;
+S_wet_f = 1.02*((2*h_f*D_f) + 4*(c*l_f));
 Q_f = 1.2;
 
 % Re_f = rho * V_CR * l_f/mu_air; %Reynolds number with fuselage length as ref length

@@ -1,14 +1,13 @@
 
 CL_req = linspace(-1,2,1000);
 
-VH = Sh_S * lt_c;
 
 CL_det = CLa_t/pi() * (acos(1-2*SE_Sh) + 2*sqrt(SE_Sh*(1-SE_Sh)));
 CL_de = Sh_S * CL_det;
 
-CM_de = CL_det * Sh_S * (x_cg_chosen - x_ac) - CL_det * VH;
+CM_de = CL_det * Sh_S * (x_cg_chosen - x_ac) - CL_det * VH_ht;
 
-CM_a = CL_a * (x_cg_chosen - x_ac) - CLa_t * (1-de_da) * VH;
+CM_a = CL_a * (x_cg_chosen - x_ac) - CLa_t * (1-de_da) * VH_ht;
 
 a_trim = rad2deg((CM0 * CL_de + CM_de * (CL_req - CL_0)) ./ (CL_a * CM_de - CL_de * CM_a));
 de_trim = rad2deg(-((CM0 * CL_a + CM_a*(CL_req - CL_0)) ./ (CL_a * CM_de - CL_de * CM_a)));

@@ -23,7 +23,7 @@ tail_area_h = Sh_S * wing_area_total;
 b_tail_h = sqrt(tail_area_h * AR_tail);
 c_tail_h = tail_area_h / b_tail_h;
 
-V_ht = Sh_S * lt_c;
+VH_ht = Sh_S * lt_c;
 
 %% Vertical Tail Area
 % VC_vt = 0.03;                 % chosen from values in lecture
@@ -41,8 +41,7 @@ V_ht = Sh_S * lt_c;
 
 % c_tail_v_tip  = lambda_vt * c_tail_v_root;
 
-VC_vt = 0.04; % chosen from values in lecture
-lambda_vt = 0.4;
+
 tail_area_v = (VC_vt*b*wing_area_total)/(lt);
 AR_vt = 2; % chosen from values 
 b_tail_v = sqrt(tail_area_v*AR_vt);
@@ -90,6 +89,5 @@ fprintf("Vertical Stabilizer Span:  %.4f [m^2]\n", b_tail_v);
 fprintf("Vertical Stabilizer Root Chord:  %.4f [m^2]\n", c_tail_v_root);
 fprintf("Vertical Stabilizer Tip Chord:  %.4f [m^2]\n", c_tail_v_tip);
 
-VH = Sh_S * lt_c;
-xn = x_ac + (etaH * CLa_t * (1 - de_da) * VH ) / (CLa_w + Sh_S * CLa_t * (1 - de_da));
+xn = x_ac + (etaH * CLa_t * (1 - de_da) * VH_ht ) / (CLa_w + Sh_S * CLa_t * (1 - de_da));
 SM = xn - x_cg_chosen;

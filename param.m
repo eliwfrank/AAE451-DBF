@@ -92,6 +92,9 @@ CL_max_t = 0.9 * cl_max_t;
 de_da = CLa_w / (pi*AR_wing);
 K_t = 1./(pi() * e * AR_tail);
 
+VC_vt = 0.04; % chosen from values in lecture
+lambda_vt = 0.4;
+
 %% Aircraft Coefficients
 CL_max = CL_max_w + Sh_S * CL_max_t;
 CL_a = CLa_w + Sh_S * CLa_t * (1 - de_da);

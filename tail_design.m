@@ -77,7 +77,6 @@ if isnan(x_cg_forward)
     x_cg_forward = 0;
 end
 
-fprintf("Static Margin: %.4f\n",x_cg_aft - x_cg_forward)
 x_cg_chosen = (x_cg_aft + x_cg_forward) /2;
 fprintf("Chosen cg location: x_cg/c = %.4f\n",x_cg_chosen)
 
@@ -91,3 +90,4 @@ fprintf("Vertical Stabilizer Tip Chord:  %.4f [m^2]\n", c_tail_v_tip);
 
 xn = x_ac + (etaH * CLa_t * (1 - de_da) * VH_ht ) / (CLa_w + Sh_S * CLa_t * (1 - de_da));
 SM = xn - x_cg_chosen;
+fprintf("Static Margin: %.4f\n",SM)

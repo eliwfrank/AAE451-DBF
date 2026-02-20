@@ -1,6 +1,7 @@
 % v-n diagram
 velocity_array_knots = (velocity_array).*1.944;
-n_plus = 2.1 + (24000/(weight_TO + 10000));
+weight_TO_pounds = weight_TO/4.44822;
+n_plus = 2.1 + (24000/(weight_TO_pounds + 10000));
 n_minus = (-0.4)*n_plus;
 
 n_v_plus = (rho/2)*(1.688^2).*(((velocity_array_knots.^2)*(CL_max))/(W_S)); 
@@ -21,30 +22,9 @@ V_1g = sqrt((2*W_S*1)/(rho*(1.688^2)*CL_max));
 
 % Envelope construction
 
-% Positive stall curve
-idx_pos = velocity_array_knots >= V_1g & velocity_array_knots <= V_int_plus;
-V_pos_curve = velocity_array_knots(idx_pos);
-n_pos_curve = n_v_plus(idx_pos);
-
-% Negative stall curve
-idx_neg = velocity_array_knots >= V_1g & velocity_array_knots <= V_int_minus;
-V_neg_curve = velocity_array_knots(idx_neg);
-n_neg_curve = n_v_minus(idx_neg);
-
-% Intermediate segments
-V_top = linspace(V_int_plus, V_D_knots, 50);
-n_top = n_plus * ones(size(V_top));
-
-V_vert = V_D_knots * ones(1,50);
-n_vert = linspace(n_plus, n_minus, 50);
-
-V_bot = linspace(V_D_knots, V_int_minus, 50);
-n_bot = n_minus * ones(size(V_bot));
-
-V_envelope = [V_1g, V_pos_curve, V_top, V_vert,V_bot, fliplr(V_neg_curve), ...
-    V_1g];
-
-n_envelope = [-1, n_pos_curve, n_top, n_vert, n_bot, fliplr(n_neg_curve),1];
+%% Key Speeds
+V_A_plus  = V_int_plus;      % maneuvering speed (+)
+V_A_minus = V_int_minus;     % maneuvering speed (-)
 
 % Gust lines
 mu_gust = (2*(W_S))/(rho*c*CL_a*g);
@@ -55,6 +35,41 @@ n_gust_50 = 1 + (K_gust.*Ude_max.*velocity_array.*CL_a)./(2*(W_S));
 n_gust_25 = 1 + (K_gust.*Ude_25.*velocity_array.*CL_a)./(2*(W_S));
 n_gust_neg50 = 1 - (K_gust.*Ude_max.*velocity_array.*CL_a)./(2*(W_S));
 n_gust_neg25 = 1 - (K_gust.*Ude_25.*velocity_array.*CL_a)./(2*(W_S));
+
+% building the v-n envelope
+
+V_gust_top = ((n_plus - 1) * 2 * (W_S)) / ...
+    (K_gust * Ude_max * CL_a);
+
+V_gust_bot = ((1 - n_minus) * 2 * (W_S)) / ...
+    (K_gust * Ude_max * CL_a);
+
+V_gust_top_knots = V_gust_top * 1.944;
+V_gust_bot_knots = V_gust_bot * 1.944;
+
+V_corner_top = min([V_A_plus, V_gust_top_knots, V_D_knots]);
+V_corner_bot = min([V_A_minus, V_gust_bot_knots, V_D_knots]);
+
+idx_pos = velocity_array_knots <= V_corner_top;
+V_pos_curve = velocity_array_knots(idx_pos);
+n_pos_curve = n_v_plus(idx_pos);
+
+idx_neg = velocity_array_knots <= V_corner_bot;
+V_neg_curve = velocity_array_knots(idx_neg);
+n_neg_curve = n_v_minus(idx_neg);
+
+V_top = linspace(V_corner_top, V_D_knots, 50);
+n_top = n_plus * ones(size(V_top));
+
+V_vert = V_D_knots * ones(1,50);
+n_vert = linspace(n_plus, n_minus, 50);
+
+V_bot = linspace(V_D_knots, V_corner_bot, 50);
+n_bot = n_minus * ones(size(V_bot));
+
+V_envelope = [0,V_pos_curve,V_top,V_vert,V_bot,fliplr(V_neg_curve), 0];
+n_envelope = [0,n_pos_curve,n_top,n_vert,n_bot,fliplr(n_neg_curve),0];
+
 
 figure();
 yline(n_plus, "b--", linewidth = 1.5);

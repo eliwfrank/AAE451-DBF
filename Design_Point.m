@@ -31,9 +31,10 @@ plot(wingloading_M, powerloading_M,"m")
 plot(wingloading_TO,powerloading_TO,"k")
 ylim([0 0.6])
 
-margin = 0.90;
-W_S = wingloading_stall * margin;
-W_P = interp1(wingloading_TO, powerloading_TO, wingloading_stall) * margin;
+wingloading_margin = 0.7;
+powerloading_margin = .95;
+W_S = wingloading_stall * wingloading_margin;
+W_P = interp1(wingloading_TO, powerloading_TO, wingloading_stall) * powerloading_margin;
 plot(W_S,W_P,'ko', 'MarkerFaceColor', "yellow", 'MarkerSize', 10)
 
 fprintf("Wingloading Design Point (W/S): %.4f [N/m^2]\nPowerloading Design Point (W/P): %.4f [N/W]\n", W_S,W_P)

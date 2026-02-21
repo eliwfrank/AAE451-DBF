@@ -14,13 +14,13 @@ V_CR = 18; % Cruise Velocity
 V_CL = 13; % Climb Velocity
 
 %% Coefficients
-CD_0i = 0.0383; % Parasitic Drag Coefficient
+CD_0i = 00.0352; % Parasitic Drag Coefficient
 CL_Ri = 1.0541; % CL at rotation - recalculated, 
 CD_G = .0875; % Ground Drag Coefficient
 
 %% Efficiencies
 etaP_CRi = 0.6595; % Cruise/level flight Propellor Efficiency, calculated in prop system periodically update
-etaP_TOi = 0.5024; % TO prop efficiency, calculated in prop system periodically update
+etaP_TOi = 0.4589; % TO prop efficiency, calculated in prop system periodically update
 etaP_CLi = 0.5490; % Climb Propellor efficiency, calculated in prop system periodically update
 etaP_Mi = 0.6418; % maneuvering propeller efficiency, calculated in prop system periodically update
 
@@ -74,7 +74,7 @@ cl_max_t = 1.1101;
 cla_t = 6.86 ; % tail CLa per radian
 
 %% Wing Characteristics
-AR_wing = 7; % the same for individual wing as both wings combined since using the same size wing
+AR_wing = 9; % the same for individual wing as both wings combined since using the same size wing
 CL0_w = cl0_w; % Wing CL0
 Cm0_w = cm0_w; % from clark y
 CM0 = Cm0_w;

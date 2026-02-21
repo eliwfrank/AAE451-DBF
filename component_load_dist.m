@@ -19,7 +19,7 @@
 % lift_distribution = lift_coefficient * q * chord * np.sqrt(1 - (y / semi_span)**2
 
 y = linspace(0,b/2,1000);
-q = (1/2)*rho*(V_CR^2)*n_top(1); % Max Load for Pitch at Cruise
+q = (1/2)*rho*(V_CR^2)*(n_plus - 1); % Max Load for Pitch at Cruise
 L_dist = CL_max_w*q*c*sqrt(1-(y/(b/2)).^2); % CL_max for wing at AoA Stall
 
 % --------- SHEAR + BENDING (tip -> root integration) ----------

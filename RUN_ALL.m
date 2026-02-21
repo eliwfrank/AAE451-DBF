@@ -15,4 +15,9 @@ run("control_surface_and_servo.m")
 run("vn_diagram.m")
 
 run("parameter_update_check.m")
-close all
+run("wing_design.m")
+
+run("component_load_dist.m")
+run("wing_box_flexural.m")
+run("wing_box_symb_D_box.m")
+% close all

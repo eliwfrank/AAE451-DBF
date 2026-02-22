@@ -1,8 +1,8 @@
 % v-n diagram
 velocity_array_knots = (velocity_array).*1.944;
 weight_TO_pounds = weight_TO/4.44822;
-n_plus = 2.1 + (24000/(weight_TO_pounds + 10000));
-n_minus = (-0.4)*n_plus;
+n_plus = 3.5;
+n_minus = -1.5;
 
 n_v_plus = (rho/2)*(1.688^2).*(((velocity_array_knots.^2)*(CL_max))/(W_S)); 
 % allegedly cl_max + and - should be different? idk we need to look at it

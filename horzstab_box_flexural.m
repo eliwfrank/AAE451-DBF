@@ -16,13 +16,13 @@
 
 
 %% ========== USER INPUTS ==========
-csvFile = "ClarkY.csv";     % airfoil file: columns [x/c, z/c]
-chord = c*1000;                  % chord [mm]
+csvFile = "NACA0012.csv";     % airfoil file: columns [x/c, z/c]
+chord = c_tail_h*1000;                  % chord [mm]
 
-Vz = V(1);
+Vz_ht = V_t(1);
 
 xF = 0.25;                  % front spar x/c
-xR = 0.75;                  % rear  spar x/c
+xR = 0.6;                  % rear  spar x/c
 
 % ----- Materials for q0 (compatibility) -----
 % Use your best estimates (placeholders OK for now)
@@ -33,8 +33,8 @@ t_web  = 1.0;               % web thickness [mm]
 G_web  = 180;               % [N/mm^2] web shear modulus (balsa/ply placeholder)
 
 % ----- Carbon tube spar boom area -----
-Do = 15;                     % [mm] OD
-Di = 14;                     % [mm] ID
+Do = 5;                     % [mm] OD
+Di = 4;                     % [mm] ID
 A_tube = (pi/4)*(Do^2 - Di^2);  % [mm^2]
 
 % ----- Rear spar (at xR) as BALSA I-beam (boom-equivalent) -----
@@ -50,8 +50,8 @@ k_str = 0.30;               % height = 30% of local thickness
 hmax_str = 6.0;             % clamp max height [mm]
 
 % Middle cell stringers only (3 top, 2 bottom)
-x_str_top = [0.35 0.50 0.65];
-x_str_bot = [0.4167 0.5833];
+x_str_top = [0.32 0.42 0.52];
+x_str_bot = [0.37 0.47];
 
 % Plot controls
 showLabels = true;
@@ -136,11 +136,11 @@ fprintf("Iy (boom idealization, middle cell) = %.6e mm^4\n", Iy);
 stations = buildStationsCell_MID_ONLY(booms, xF, xR, zu_c, zl_c, chord, zbar);
 
 %% ========== 5) BASIC q'(s) BY BOOM-WALK ==========
-[qPanels, ~] = shearFlowPanelsFromStations(stations, Vz, Iy);
+[qPanels, ~] = shearFlowPanelsFromStations(stations, Vz_ht, Iy);
 
 %% ========== 6) SOLVE q0 (ZERO TWIST) + SHEAR CENTER x_sc ==========
 [q0, x_sc_mm, x_sc_over_c, theta_check] = solve_q0_and_shearcenter( ...
-    stations, qPanels, Vz, xF, xR, zu_c, zl_c, chord, Nsamp_int, t_skin, G_skin, t_web, G_web);
+    stations, qPanels, Vz_ht, xF, xR, zu_c, zl_c, chord, Nsamp_int, t_skin, G_skin, t_web, G_web);
 
 fprintf("\n--- Closed-cell correction (middle cell) ---\n");
 fprintf("q0 = %.6f N/mm\n", q0);
@@ -156,7 +156,7 @@ qMin = min(qAbs); qMax = max(qAbs);
 if abs(qMax-qMin) < 1e-12, qMax = qMin + 1; end
 
 figure; hold on; grid on; axis equal;
-title(sprintf("Wing Flexural Shear Flow with q0 (Vz = %.1f N)", Vz));
+title(sprintf("Horiz. Stab. Flexural Shear Flow with q0 (Vz = %.1f N)", Vz_ht));
 xlabel("x/c"); ylabel("z/c");
 
 % Airfoil outline
@@ -191,7 +191,7 @@ plotColoredPanelsAirfoil_xc(stations, qPanels_tot, qMin, qMax, showLabels, chord
 cb = colorbar;
 cb.Label.String = "|q| (N/mm)";
 
-T = V*abs(c/4 - x_sc_over_c*c); % will be in N*m, this is Wing Torsion
+T_h = V_t*abs(c_tail_h/4 - x_sc_over_c*c_tail_h); % will be in N*m, this is Wing Torsion
 
 %% ===================== LOCAL FUNCTIONS =====================
 

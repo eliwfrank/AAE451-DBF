@@ -6,8 +6,12 @@ alpha_TO_deg = rad2deg(alpha_TO);
 alpha_TB_deg = alpha_TO_deg + 5; % add 5 degrees to the TO alpha for tipback angle
 alpha_TB = deg2rad(alpha_TB_deg); % convert tipback angle to radians
 
-x_mg = (x_cg_chosen) + (0.21*tan(alpha_TB)); % the x_cg needs to be fixed!
+% calculating the actual x_cg
+top_wing_to_nose = 0.236; % m - update with cad
+x_cg_true = top_wing_to_nose + (x_cg_chosen*c);
 
-nose_load = 0.2; % 20% of the wieght should be on the nose gear
+x_mg = (x_cg_true) + (0.21*tan(alpha_TB)); % the x_cg needs to be fixed!
 
-x_nose = x_mg - (x_mg - x_cg_chosen)/nose_load;
+nose_load = 0.15; % 20% of the wieght should be on the nose gear
+
+x_nose = x_mg + (x_mg - x_cg_chosen)/nose_load;

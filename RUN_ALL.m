@@ -14,7 +14,6 @@ run("battery_sizing.m")
 run("control_surface_and_servo.m")
 run("vn_diagram.m")
 
-run("parameter_update_check.m")
 run("wing_design.m")
 
 run("component_load_dist.m")
@@ -23,4 +22,7 @@ run("wing_box_symb_D_box.m")
 run("horzstab_box_flexural.m")
 run("horzstab_symb_D_box.m")
 run("load_dist_plots.m")
-% close all
+
+run("thrust_function.m")
+run("perf_analysis.m")
+run("parameter_update_check.m")

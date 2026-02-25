@@ -44,7 +44,48 @@ ylabel('Distance (m)')
 legend('Distance','Velocity','Location','best')
 
 % cl_g is cl_0 and de is 0 at ground conditions
-function dydt = takeoff_ode(t,y,weight_TO, rho, wing_area_total, mu_ground, CL_0, CD_0, K_w,Thrust_func,K_t,Sh_S,CL0_t,CLa_t) 
+% V_TO_array = linspace(V_TO,V_max,1000);
+% 
+% D = 0.5 * rho * V_TO_array.^2 * wing_area_total * (CD_0 + K_w*CL_0^2 + Sh_S * K_t * CL_t.^2); 
+% 
+% ROC = V_TO_array * (Thrust_func(rmp_100,V_TO_array) - D) / weight_TO;
+% gamma_climb = asin((Thrust_func(rmp_100,V_TO_array) - D) / weight_TO);
+% 
+% delta_t_climb = h / ROC;
+
+V_CR_array = linspace(5,35,1000);
+
+CD_de_CR_trim = interp1(CL_trim, CD_trim,CL_de);
+de_CR_trim = interp1(CL_trim,de_trim,CL_de);
+
+CD_de_CR_clean = interp1(CL_clean, CD_clean,CL_de);
+de_CR_clean = zeros(size(de_CR_trim));
+
+Thrust_req_trim = 1/2 * rho * V_CR_array.^2 * wing_area_total * (CD_0 + K_w * CL_CR^2 + Sh_S * CD_de_CR_trim * de_CR_trim);
+Thrust_req_clean = 1/2 * rho * V_CR_array.^2 * wing_area_total * (CD_0 + K_w * CL_CR^2 + Sh_S * CD_de_CR_clean * de_CR_clean);
+
+rpm_100 = 9989;
+rpm_80 = 0.80 * rpm_100;
+rpm_68 = 0.68 * rpm_100;
+for i = 1:length(V_CR_array)
+thrust_100(i) = Thrust_func(V_CR_array(i),rpm_100);
+thrust_80(i) = Thrust_func(V_CR_array(i),rpm_80);
+thrust_68(i) = Thrust_func(V_CR_array(i),rpm_68);
+end
+
+figure()
+plot(V_CR_array,Thrust_req_trim)
+hold on
+plot(V_CR_array,Thrust_req_clean)
+plot(V_CR_array, thrust_100)
+plot(V_CR_array, thrust_80)
+plot(V_CR_array,thrust_68)
+grid on
+xline(V_s)
+
+
+function dydt = takeoff_ode(t,y,weight_TO, rho, wing_area_total, mu_ground, CL_0, CD_0, K_w, ...
+    Thrust_func,K_t,Sh_S,CL0_t,CLa_t) 
 
     % velocity
     dist = y(1);     % position

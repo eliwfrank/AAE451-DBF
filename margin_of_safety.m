@@ -1,51 +1,146 @@
-% margin of safety vs number of ribs plot
+%% ============================================================
+%           FULL AIRCRAFT STRUCTURAL MARGIN OF SAFETY
+% ============================================================
 
-I = 1.2e-8;        % m^4  (example — replace)
-y_max = 0.04;      % m    (distance to outer skin)
+fprintf('\n====================================================\n')
+fprintf('           STRUCTURAL MARGIN OF SAFETY\n')
+fprintf('====================================================\n\n')
 
-sigma_bend = M_bend .* y_max ./ I;   % 1x1000 vector
+%% ------------------------------------------------------------
+% MATERIAL ALLOWABLES  (EDIT TO MATCH YOUR MATERIAL DATA)
+%% ------------------------------------------------------------
 
-Q = 3.5e-6;       % m^3 (example)
-t_web = 0.003;    % m
+sigma_allow_carbon = 600e6;     % Pa
+sigma_allow_al     = 276e6;     % Pa (6061-T6)
+sigma_allow_balsa  = 20e6;      % Pa (conservative)
 
-tau_web = V .* Q ./ (I * t_web);
+tau_allow_carbon   = 80e6;      % Pa
+tau_allow_balsa    = 8e6;       % Pa
 
-nu = 0.3;
-E_skin = 2*G_skin*(1+nu);
-E_web  = 2*G_web*(1+nu);
+%% ============================================================
+%% WING SPAR BENDING
+%% ============================================================
 
-N_ribs = 2:12;
-semi_span = 0.9;    % example
+sigma_wing_carbon = max(abs(stress_wc));
+sigma_wing_balsa  = max(abs(stress_wb));
 
-k = 4;
+MS_wing_carbon = sigma_allow_carbon / sigma_wing_carbon - 1;
+MS_wing_balsa  = sigma_allow_balsa  / sigma_wing_balsa  - 1;
 
-MS_stringer_buckling = zeros(size(N_ribs));
-MS_web_shear = zeros(size(N_ribs));
-MS_bending_material = zeros(size(N_ribs));
+fprintf('Wing Spar (Carbon) MS: %.3f\n', MS_wing_carbon)
+fprintf('Wing Spar (Balsa)  MS: %.3f\n\n', MS_wing_balsa)
 
-sigma_allow = 120e6;     % define from material
-tau_allow   = 20e6;
+%% ============================================================
+%% WING SHEAR (MAX ROOT SHEAR)
+%% ============================================================
 
-for i = 1:length(N_ribs)
+V_root = abs(V(1));
+A_spar = pi*(Do^2 - Di^2)/4;
 
-    N = N_ribs(i);
-    panel_length = (b/2)/ N;
+tau_wing = V_root / A_spar;
 
-    % ---- Critical Buckling Stress (skin)
-    sigma_cr = (k*pi^2*E_skin/(12*(1-nu^2))) ...
-                * (t_skin/panel_length)^2;
+MS_wing_shear = tau_allow_carbon / tau_wing - 1;
 
-    % ---- Critical Shear Buckling (web)
-    tau_cr = (k*pi^2*E_web/(12*(1-nu^2))) ...
-             * (t_web/panel_length)^2;
+fprintf('Wing Spar Shear MS: %.3f\n\n', MS_wing_shear)
 
-    % ---- Use MAX stress along span
-    sigma_max = max(abs(sigma_bend));
-    tau_max   = max(abs(tau_web));
+%% ============================================================
+%% WING TORSION (FROM SCRIPT 2)
+%% ============================================================
 
-    % ---- Margins
-    MS_stringer_buckling(i) = sigma_cr/sigma_max - 1;
-    MS_web_shear(i) = tau_cr/tau_max - 1;
-    MS_bending_material(i) = sigma_allow/sigma_max - 1;
+if exist('T','var')
 
+    J = (pi/32)*(Do^4 - Di^4);
+    tau_torsion = T(1)*(Do/2) / J;
+
+    MS_wing_torsion = tau_allow_carbon / tau_torsion - 1;
+
+    fprintf('Wing Torsion MS: %.3f\n\n', MS_wing_torsion)
+
+else
+    fprintf('Wing Torsion MS: (No torsion input found)\n\n')
 end
+
+%% ============================================================
+%% HORIZONTAL TAIL SPAR
+%% ============================================================
+
+sigma_tail_carbon = max(abs(stress_tc));
+sigma_tail_balsa  = max(abs(stress_tb));
+
+MS_tail_carbon = sigma_allow_carbon / sigma_tail_carbon - 1;
+MS_tail_balsa  = sigma_allow_balsa  / sigma_tail_balsa  - 1;
+
+fprintf('Horizontal Tail Spar (Carbon) MS: %.3f\n', MS_tail_carbon)
+fprintf('Horizontal Tail Spar (Balsa)  MS: %.3f\n\n', MS_tail_balsa)
+
+%% ============================================================
+%% TAIL BOOM (ELEVATOR CASE)
+%% ============================================================
+
+sigma_boom = max(abs(stress_boom));
+
+MS_boom_bending = sigma_allow_carbon / sigma_boom - 1;
+
+fprintf('Tail Boom Bending (Elevator) MS: %.3f\n', MS_boom_bending)
+
+%% ------------------------------------------------------------
+%% TAIL BOOM (RUDDER CASE)
+%% ------------------------------------------------------------
+
+sigma_boom_rudder = max(abs(stress_booma));
+
+MS_boom_rudder = sigma_allow_carbon / sigma_boom_rudder - 1;
+
+fprintf('Tail Boom Bending (Rudder)   MS: %.3f\n', MS_boom_rudder)
+
+%% ------------------------------------------------------------
+%% TAIL BOOM TORSION
+%% ------------------------------------------------------------
+
+if exist('T_boom','var')
+
+    tau_boom = max(abs(T_boom))*(Do_bcarbon/2) / I_boom;
+
+    MS_boom_torsion = tau_allow_carbon / tau_boom - 1;
+
+    fprintf('Tail Boom Torsion MS: %.3f\n', MS_boom_torsion)
+end
+
+%% ------------------------------------------------------------
+%% TAIL BOOM COLUMN BUCKLING
+%% ------------------------------------------------------------
+
+L_boom = L;   % length from your script
+E = 150e9;
+
+P_cr = (pi^2*E*I_boom)/(L_boom^2);
+P_actual = max(abs(Fz));   % elevator force
+
+MS_boom_buckling = P_cr/P_actual - 1;
+
+fprintf('Tail Boom Buckling MS: %.3f\n\n', MS_boom_buckling)
+
+%% ============================================================
+%% SUMMARY
+%% ============================================================
+
+MS_all = [
+    MS_wing_carbon
+    MS_wing_balsa
+    MS_wing_shear
+    MS_tail_carbon
+    MS_tail_balsa
+    MS_boom_bending
+    MS_boom_rudder
+    MS_boom_buckling
+];
+
+MS_min = min(MS_all);
+
+fprintf('----------------------------------------------------\n')
+fprintf('MINIMUM AIRCRAFT MARGIN OF SAFETY: %.3f\n', MS_min)
+fprintf('----------------------------------------------------\n\n')
+
+fprintf("Wing bending stress = %.5f MPa\n", sigma_wing_carbon/1e6)
+fprintf("Wing shear stress   = %.5f MPa\n", tau_wing/1e6)
+fprintf("Wing torsion stress = %.5f MPa\n", tau_torsion/1e6)

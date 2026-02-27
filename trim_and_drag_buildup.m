@@ -66,22 +66,24 @@ Q_t = 1.05;
 CD_S_main = 0.18; % drag coefficient based on type of tires
 CD_S_nose = 0.18; % drag coefficient based on type of tires
 
-wheel_diameter = 0.06;
-wheel_width = 0.003;
+wheel_diameter_nose = 0.0762;
+wheel_diameter_main = 0.08255;
+
+wheel_width_nose = .025;
+wheel_width_main = .029;
 
 %% TOTAL PARASITE DRAG
-% Re = rho * V_CR * c;
 C_f = 0.455 / (log10(Re))^2.58;
 S_ref = wing_area_total;
 C_D_0_f = (FF_f * Q_f * C_f_f * S_wet_f) / S_ref;
 C_D_0_w = (FF_w * Q_w * C_f_w * S_wet_w) / S_ref;
 C_D_0_ht = (FF_ht * Q_t * C_f_t * S_wet_ht) / S_ref;
-C_D_0_lg_nose = 1/2 * (wheel_diameter*wheel_width) * CD_S_nose / S_ref; % Landing gear
-C_D_0_lg_main = 1/2 * (wheel_diameter*wheel_width) * CD_S_nose / S_ref; % Landing gear
+C_D_0_lg_nose = 1/2 * (wheel_diameter_nose*wheel_width_nose) * CD_S_nose / S_ref; % Landing gear
+C_D_0_lg_main = 1/2 * (wheel_diameter_main*wheel_width_main) * CD_S_nose / S_ref; % Landing gear
 C_D_0_vt = (FF_vt * Q_t * C_f_t * S_wet_vt) / S_ref;
 
 %TOTAL PARASITIC DRAG
-CD_0 = ((C_D_0_f + C_D_0_w + C_D_0_ht + C_D_0_vt + C_D_0_lg_main + C_D_0_lg_nose + 0.0027)*1.1)*1.25; 
+CD_0 = ((C_D_0_f + C_D_0_w + C_D_0_ht + C_D_0_vt + 2* C_D_0_lg_main + C_D_0_lg_nose + 0.0027)*1.1)*1.25; 
 fprintf("\nDRAG BUILD-UP ------------------------\n")
 
 fprintf("Fuselage CD0: %.4f", C_D_0_f)

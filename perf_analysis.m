@@ -4,11 +4,12 @@
 V0 = 0;
 x0 = 0;
 
-y0 = [V0; x0];
+y0 = [x0; V0];
 
 % Time span
 tspan = [0 15];
 
+%% Takeoff Performance
 % Solve
 [t,y] = ode45(@(t,y) takeoff_ode(t,y,weight_TO, rho, wing_area_total, mu_ground, CL_0, CD_0, K_w,Thrust_func,K_t,Sh_S,CL0_t,CLa_t), tspan, y0);
 
@@ -42,7 +43,9 @@ plot(t, dist, "m-", 'LineWidth', 1.5);
 ylabel('Distance (m)')
 
 legend('Distance','Velocity','Location','best')
+%% Climb Performance
 
+%% Cruise Performance
 % cl_g is cl_0 and de is 0 at ground conditions
 % V_TO_array = linspace(V_TO,V_max,1000);
 % 
@@ -55,22 +58,27 @@ legend('Distance','Velocity','Location','best')
 
 V_CR_array = linspace(5,35,1000);
 
-CD_de_CR_trim = interp1(CL_trim, CD_trim,CL_de);
-de_CR_trim = interp1(CL_trim,de_trim,CL_de);
+% CD_de_CR_clean = interp1(CL_clean, CD_clean,CL_de);
+% de_CR_clean = zeros(size(de_CR_trim));
 
-CD_de_CR_clean = interp1(CL_clean, CD_clean,CL_de);
-de_CR_clean = zeros(size(de_CR_trim));
 
-Thrust_req_trim = 1/2 * rho * V_CR_array.^2 * wing_area_total * (CD_0 + K_w * CL_CR^2 + Sh_S * CD_de_CR_trim * de_CR_trim);
-Thrust_req_clean = 1/2 * rho * V_CR_array.^2 * wing_area_total * (CD_0 + K_w * CL_CR^2 + Sh_S * CD_de_CR_clean * de_CR_clean);
+for i = 1:length(V_CR_array)
+    CL_perf(i) = weight_TO ./ ( 1/2 * rho * V_CR_array(i).^2 * wing_area_total); % Lift can't equal weight in climb, how do you find lift in climb
+    CD_perf_clean(i) = interp1(CL_clean, CD_clean, CL_perf(i));
+    CD_perf_trim(i) = interp1(CL_trim, CD_trim, CL_perf(i));
+end
+
+Thrust_req_trim = 1/2 * rho * V_CR_array.^2 * wing_area_total .* (CD_perf_trim);
+Thrust_req_clean = 1/2 * rho * V_CR_array.^2 * wing_area_total .* (CD_perf_clean);
 
 rpm_100 = 9989;
 rpm_80 = 0.80 * rpm_100;
 rpm_68 = 0.68 * rpm_100;
+
 for i = 1:length(V_CR_array)
-thrust_100(i) = Thrust_func(V_CR_array(i),rpm_100);
-thrust_80(i) = Thrust_func(V_CR_array(i),rpm_80);
-thrust_68(i) = Thrust_func(V_CR_array(i),rpm_68);
+    thrust_100(i) = Thrust_func(V_CR_array(i),rpm_100);
+    thrust_80(i) = Thrust_func(V_CR_array(i),rpm_80);
+    thrust_68(i) = Thrust_func(V_CR_array(i),rpm_68);
 end
 
 figure()
@@ -80,9 +88,12 @@ plot(V_CR_array,Thrust_req_clean)
 plot(V_CR_array, thrust_100)
 plot(V_CR_array, thrust_80)
 plot(V_CR_array,thrust_68)
+title("Aircraft Cruise Performance")
+ylabel("Thrust/Drag (N)")
+xlabel("Airspeed (m/s)")
 grid on
 xline(V_s)
-
+legend("Thrust Required Trimmed (Drag)","Thrust Required Clean (Drag)","Thrust at 100%","Thrust at 80%","Thrust at 68%")
 
 function dydt = takeoff_ode(t,y,weight_TO, rho, wing_area_total, mu_ground, CL_0, CD_0, K_w, ...
     Thrust_func,K_t,Sh_S,CL0_t,CLa_t) 
@@ -97,7 +108,7 @@ function dydt = takeoff_ode(t,y,weight_TO, rho, wing_area_total, mu_ground, CL_0
     end
     
     %% --- Lift ---
-    L = 0.5*rho*Vel^2*wing_area_total*CL_0;
+    L = 0.5*rho*Vel.^2*wing_area_total*CL_0;
     
     %% --- Drag ---
     alpha_t = 0;

@@ -138,13 +138,25 @@ grid on
 xline(V_s,"r-.",LineWidth=1.5)
 legend("Thrust Required Trimmed (Drag)","Thrust Required Clean (Drag)","Thrust at 100%","Thrust at 80%","Thrust at 68%","Stall Velocity")
 
+for i = 1:length(Vel_array)
+np_100perf(i) = etaP_func(Vel_array(i),rpm_100);
+np_80perf(i) = etaP_func(Vel_array(i),rpm_80);
+np_68perf(i) = etaP_func(Vel_array(i),rpm_68);
+end
+
+np_100perf(np_100perf <= 0.1) = 0.1;
+np_80perf(np_80perf <= 0.1)   = 0.1;
+np_60perf(np_60perf <= 0.1)   = 0.1;
+
 figure()
-plot(Vel_array,Thrust_req_trim .* Vel_array,"k-",'LineWidth', 1.5)
+plot(Vel_array,(Thrust_req_trim .* Vel_array)/(etaESC*etaM*etaP_CR),"k-",'LineWidth', 1.5)
 hold on
-plot(Vel_array,Thrust_req_clean .* Vel_array,"k--",'LineWidth', 1.5)
-plot(Vel_array, thrust_100 .* Vel_array,"b-",'LineWidth', 1.5)
-plot(Vel_array, thrust_80 .* Vel_array,"b--",'LineWidth', 1.5)
-plot(Vel_array,thrust_68 .* Vel_array,"b-.",'LineWidth', 1.5)
+plot(Vel_array,(Thrust_req_clean .* Vel_array)/(etaESC*etaM*etaP_CR),"k--",'LineWidth', 1.5)
+plot(Vel_array, (thrust_100 .* Vel_array)./(etaESC*etaM*np_100perf),"b-",'LineWidth', 1.5)
+plot(Vel_array, (thrust_80 .* Vel_array)./(etaESC*etaM*np_80perf),"b--",'LineWidth', 1.5)
+plot(Vel_array,(thrust_68 .* Vel_array)./(etaESC*etaM*np_68perf),"b-.",'LineWidth', 1.5)
+xlim([0 28])
+ylim([0 750])
 title("Aircraft Cruise Performance - Power")
 ylabel("Power (W)")
 xlabel("Airspeed (m/s)")

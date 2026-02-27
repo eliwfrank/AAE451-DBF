@@ -45,77 +45,21 @@ D_i = cdi_array.*0.5*rho.*(velocity_array.^2);
 D_0 = 0.5*CD_0*rho.*((velocity_array).^2).*wing_area_total;
 D_array = D_0 + D_i;
 % values from chosen prop system - 12X6E at 9,989 RPM
-velocity_fromprop_10 = [0.000
-1.127
-2.253
-3.384
-4.510
-5.637
-6.763
-7.897
-9.022
-10.148
-11.274
-12.410
-13.533
-14.659
-15.785
-16.910
-18.036
-19.162
-20.295
-21.421
-22.543
-23.673
-24.800
-25.927
-27.053
-28.180
-29.307
-30.435
-31.571];
+rpm_100per = 9989;
+rpm_75per = 0.75 * rpm_100per;
+rpm_50per = 0.50 * rpm_100per;
+rpm_25per = 0.25 * rpm_100per;
 
-thrust_fromprop_10 = [27.785
-27.328
-26.837
-26.311
-25.747
-25.145
-24.503
-23.819
-23.092
-22.322
-21.508
-20.649
-19.747
-18.801
-17.813
-16.781
-15.708
-14.598
-13.457
-12.287
-11.093
-9.879
-8.648
-7.404
-6.152
-4.898
-3.647
-2.405
-1.181];
-
-V_75per = velocity_fromprop_10.*0.75;
-V_50per = velocity_fromprop_10.*0.50;
-V_25per = velocity_fromprop_10.*0.25;
-
-T_75per = thrust_fromprop_10.*0.75;
-T_50per = thrust_fromprop_10.*0.50;
-T_25per = thrust_fromprop_10.*0.25;
+for i = 1:length(velocity_array)
+thrust_100per(i) = Thrust_func(velocity_array(i),rpm_100per);
+thrust_75per(i) = Thrust_func(velocity_array(i),rpm_75per);
+thrust_50per(i) = Thrust_func(velocity_array(i),rpm_50per);
+thrust_25per(i) = Thrust_func(velocity_array(i),rpm_25per);
+end
 
 % Find intersection of 100% throttle thrust and drag
 
-T_interp = interp1(velocity_fromprop_10, thrust_fromprop_10, ...
+T_interp = interp1(velocity_array, thrust_100per, ...
                    velocity_array, 'linear', 'extrap');
 
 diff_T_D = T_interp - D_array;
@@ -126,14 +70,15 @@ V_max = interp1(diff_T_D(idx:idx+1), velocity_array(idx:idx+1), 0);
 fprintf("Maximum Velocity (Thrust = Drag): %.4f [m/s]\n", V_max);
 
 figure();
-plot(velocity_fromprop_10, thrust_fromprop_10, "m-", linewidth = 1.5);
+plot(velocity_array, thrust_100per, "m-", linewidth = 1.5);
 hold on
-plot(V_75per, T_75per, "m-.", linewidth = 1.5);
-plot(V_50per, T_50per, "m:", linewidth = 1.5);
-plot(V_25per, T_25per, "m--", linewidth = 1.5);
+plot(velocity_array, thrust_75per, "m-.", linewidth = 1.5);
+plot(velocity_array, thrust_50per, "m:", linewidth = 1.5);
+plot(velocity_array, thrust_25per, "m--", linewidth = 1.5);
 plot(velocity_array, D_array, "g-", linewidth = 1.5);
 plot(V_max, interp1(velocity_array, D_array, V_max), ...
      'bo', 'MarkerSize', 8, linewidth = 2);
+ylim([0 30]);
 title("Drag and Thrust vs Airspeed");
 ylabel("Forces (N)");
 xlabel('Airspeed (m/s)');
@@ -142,47 +87,22 @@ xlim([0 28]);
 grid on;
 
 % plotting propeller efficiency vs airspeed
-n_p_fromprop_10 = [0.0000
-0.0646
-0.1257
-0.1834
-0.2377
-0.2888
-0.3367
-0.3817
-0.4236
-0.4627
-0.4991
-0.5327
-0.5637
-0.5919
-0.6175
-0.6402
-0.6601
-0.6768
-0.6901
-0.6996
-0.7047
-0.7046
-0.6980
-0.6833
-0.6576
-0.6168
-0.5533
-0.4536
-0.2898];
 
 
-np_75per = n_p_fromprop_10.*0.75;
-np_50per = n_p_fromprop_10.*0.50;
-np_25per = n_p_fromprop_10.*0.25;
+for i = 1:length(velocity_array)
+np_100per(i) = etaP_func(velocity_array(i),rpm_100per);
+np_75per(i) = etaP_func(velocity_array(i),rpm_75per);
+np_50per(i) = etaP_func(velocity_array(i),rpm_50per);
+np_25per(i) = etaP_func(velocity_array(i),rpm_25per);
+end
 
 figure();
-plot(velocity_fromprop_10, n_p_fromprop_10, "c-", linewidth = 1.5);
+plot(velocity_array, np_100per, "c-", linewidth = 1.5);
 hold on
-plot(V_75per, np_75per, "c-.", linewidth = 1.5);
-plot(V_50per, np_50per, "c:", linewidth = 1.5);
-plot(V_25per, np_25per, "c--", linewidth = 1.5);
+plot(velocity_array, np_75per, "c-.", linewidth = 1.5);
+plot(velocity_array, np_50per, "c:", linewidth = 1.5);
+plot(velocity_array, np_25per, "c--", linewidth = 1.5);
+ylim([0 1]);
 ylabel("Propeller Efficiency");
 xlabel('Airspeed (m/s)');
 title("Propeller Efficiency vs Airspeed");
@@ -191,49 +111,31 @@ grid on;
 
 fprintf("Thrust: %f [N]\n", T_cr)
 
-% plotting minimum power required vs airspeed
+for i = 1:length(velocity_array)
+pow_100per(i) = (pow_func(velocity_array(i),rpm_100per))/(etaM*etaESC);
+pow_75per(i) = (pow_func(velocity_array(i),rpm_75per))/(etaM*etaESC);
+pow_50per(i) = (pow_func(velocity_array(i),rpm_50per))/(etaM*etaESC);
+pow_25per(i) = (pow_func(velocity_array(i),rpm_25per))/(etaM*etaESC);
+end
 
-P_mech_min_100 = (thrust_fromprop_10.*velocity_fromprop_10)./(n_p_fromprop_10);
-P_elec_min_100 = (P_mech_min_100)./(etaM*etaESC); % converting mechanical power to electrical
-
-P_mech_min_75 = (T_75per.*V_75per)./(np_75per);
-P_elec_min_75 = (P_mech_min_100)./(etaM*etaESC); % converting mechanical power to electrical
-
-P_mech_min_50 = (T_50per.*V_50per)./(np_50per);
-P_elec_min_50 = (P_mech_min_100)./(etaM*etaESC); % converting mechanical power to electrical
-
-P_mech_min_25 = (T_25per.*V_25per)./(np_25per);
-P_elec_min_25 = (P_mech_min_100)./(etaM*etaESC); % converting mechanical power to electrical
 
 figure();
-plot(velocity_fromprop_10, P_elec_min_100, "b-", LineWidth=1.5);
+plot(velocity_array, pow_100per, 'b-', 'LineWidth', 1.5);
 hold on
-plot(V_75per, P_elec_min_75, "b-.", LineWidth=1.5);
-plot(V_50per, P_elec_min_50, "b:", LineWidth=1.5);
-plot(V_25per, P_elec_min_25, "b--", LineWidth=1.5);
+plot(velocity_array, pow_75per,  'b-.', 'LineWidth', 1.5);
+plot(velocity_array, pow_50per,  'b:', 'LineWidth', 1.5);
+plot(velocity_array, pow_25per,  'b--', 'LineWidth', 1.5);
+ylim([0 700]);
 xlabel('Airspeed (m/s)');
-ylabel("Power (W)");
-legend("100 % Throttle", "75 % Throttle", "50 % Throttle", "25 % Throttle");
-grid on
-title("Electrical Power vs Airspeed");
+ylabel('Electrical Power (W)');
+title('Electrical Power Required');
+legend('100% Throttle','75% Throttle','50% Throttle','25% Throttle');
+grid on;
 
+etaP_CR = etaP_func(V_CR, rpm_100per);
 
-etaP_CR = interp1(velocity_fromprop_10, ...
-                      n_p_fromprop_10, ...
-                      V_CR, ...
-                      'linear');
+etaP_TO = etaP_func(V_TO, rpm_100per);
 
-etaP_TO = interp1(velocity_fromprop_10, ...
-                      n_p_fromprop_10, ...
-                      V_TO, ...
-                      'linear');
+etaP_CL = etaP_func(V_CL, rpm_100per);
 
-etaP_CL = interp1(velocity_fromprop_10, ...
-                      n_p_fromprop_10, ...
-                      V_CL, ...
-                      'linear');
-
-etaP_M = interp1(velocity_fromprop_10, ...
-                      n_p_fromprop_10, ...
-                      V_M, ...
-                      'linear');
+etaP_M = etaP_func(V_M, rpm_100per);

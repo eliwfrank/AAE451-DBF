@@ -14,15 +14,15 @@ V_CR = 18; % Cruise Velocity
 V_CL = 13; % Climb Velocity
 
 %% Coefficients
-CD_0i = 00.0352; % Parasitic Drag Coefficient
+CD_0i = 0.0369; % Parasitic Drag Coefficient
 CL_Ri = 1.0541; % CL at rotation - recalculated, 
 CD_G = .0875; % Ground Drag Coefficient
 
 %% Efficiencies
-etaP_CRi = 0.6595; % Cruise/level flight Propellor Efficiency, calculated in prop system periodically update
-etaP_TOi = 0.4589; % TO prop efficiency, calculated in prop system periodically update
-etaP_CLi = 0.5490; % Climb Propellor efficiency, calculated in prop system periodically update
-etaP_Mi = 0.6418; % maneuvering propeller efficiency, calculated in prop system periodically update
+etaP_CRi = 0.6596; % Cruise/level flight Propellor Efficiency, calculated in prop system periodically update
+etaP_TOi = 0.4593; % TO prop efficiency, calculated in prop system periodically update
+etaP_CLi =0.5494; % Climb Propellor efficiency, calculated in prop system periodically update
+etaP_Mi = 0.6420; % maneuvering propeller efficiency, calculated in prop system periodically update
 
 etaM = 0.8; % motor efficiency
 etaESC = 0.95; % ESC efficiency

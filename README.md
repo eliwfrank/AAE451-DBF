@@ -11,4 +11,4 @@ FWIW I'm pretty sure the instructors know this repo exists.
 
 We recommend commenting out the structures code when not working with structures.
 
-![Final Poster](/AAE451-DBF/Poster.jpg)
+![Final Poster](/Poster.jpg)
